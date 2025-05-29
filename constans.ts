@@ -1,0 +1,4 @@
+
+export const EXPO_PUBLIC_SUPABASE_URL="https://edyhvqrbmvjgsavpqnsr.supabase.co"
+export const EXPO_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkeWh2cXJibXZqZ3NhdnBxbnNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgzNjI1NjcsImV4cCI6MjA2MzkzODU2N30.qREHYki4frsYnByw6nzF1MIspput7zFD3E7gt6RgYcE"
+        
