@@ -1,0 +1,37 @@
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import WorkersClientPostsDashboard from '../views/home/TrabajadorHomeScreen';
+import { Ionicons } from '@expo/vector-icons';
+import WorkerProfileScreen from '../views/Trabajadores/Profile';
+import { HeaderHome } from '../components/headerHome';
+
+const Tab = createBottomTabNavigator();
+
+const TabNavigatorTrabajadores = () => {
+  return (
+    
+    <Tab.Navigator>
+      <Tab.Screen 
+        name="Home" 
+        component={WorkersClientPostsDashboard} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
+          headerShown: false, // Oculta el header para esta pantalla
+        }} 
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={WorkerProfileScreen} // Cambia esto por tu componente de perfil
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" size={size} color={color} />
+          ),
+          headerShown: false, // Oculta el header para esta pantalla
+        }}/>
+      </Tab.Navigator>
+  );
+};
+
+export default TabNavigatorTrabajadores;
