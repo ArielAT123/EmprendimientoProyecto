@@ -10,13 +10,13 @@ const Tab = createBottomTabNavigator();
 const TabNavigatorTrabajadores = () => {
     return (
 
-        <Tab.Navigator>
+        <Tab.Navigator screenOptions={{ tabBarStyle: { backgroundColor: 'black', paddingVertical: 10 } }}>
             <Tab.Screen
-                name="Home"
+                name="Inicio"
                 component={WorkersClientPostsDashboard}
                 options={{
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="home-outline" size={size} color={color}/>
+                        <Ionicons name="home-outline" size={size} color={color} />
                     ),
                     headerShown: false, // Oculta el header para esta pantalla
                 }}
@@ -30,7 +30,7 @@ const TabNavigatorTrabajadores = () => {
                     headerShown: false, // Oculta el header para esta pantalla
                 }} />
             <Tab.Screen
-                name="Profile"
+                name="Perfil"
                 component={WorkerProfileScreen} // Cambia esto por tu componente de perfil
                 options={{
                     tabBarIcon: ({ color, size }) => (

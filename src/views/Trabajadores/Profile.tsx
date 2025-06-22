@@ -9,7 +9,7 @@ const WorkerProfileScreen = () => {
     profession: "Electricista certificado",
     rating: 4.7,
     completedJobs: 124,
-    profilePhoto: "https://via.placeholder.com/150",
+    profilePhoto: "https://media.istockphoto.com/id/1090878494/es/foto/retrato-de-joven-sonriente-a-hombre-guapo-en-camiseta-polo-azul-aislado-sobre-fondo-gris-de.jpg?s=612x612&w=0&k=20&c=dHFsDEJSZ1kuSO4wTDAEaGOJEF-HuToZ6Gt-E2odc6U=",
     skills: ["Instalaciones eléctricas", "Reparación de cortocircuitos", "Paneles solares", "Cableado estructurado"],
     experience: "8 años de experiencia trabajando en proyectos residenciales e industriales",
     education: "Técnico en Electricidad - Instituto Tecnológico Nacional (2015)",
@@ -69,7 +69,7 @@ const WorkerProfileScreen = () => {
   return (
     <ScrollView style={tw`bg-gray-50`}>
       {/* Header del perfil */}
-      <View style={tw`bg-white pb-6 shadow-sm`}>
+      <View style={tw`py-10 bg-white pb-6 shadow-sm`}>
         <View style={tw`items-center mt-6`}>
           <Image
             source={{ uri: workerData.profilePhoto }}
