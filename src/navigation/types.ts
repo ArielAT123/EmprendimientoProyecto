@@ -5,6 +5,8 @@ export type RootStackParamList = {
   Register: undefined;
   HomeCliente: undefined;
   HomeTrabajador: undefined;
+  TrabajadorTabs: undefined; // Navegación para trabajadores
+  
   // Agrega aquí otras pantallas si es necesario
 };
 export type HomeStackParamList = {
