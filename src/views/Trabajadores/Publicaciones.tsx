@@ -30,7 +30,7 @@ const fetchWorkerPosts = async (): Promise<WorkerPost[]> => {
         {
             postId: 'POST-001',
             title: 'Instalación de Iluminación',
-            postContent: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/electrical-services-ad-design-template-7b1c6e8b7f3e4e7a9a1e4f3b6c2a8e9d_screen.jpg?ts=1636984553',
+            postContent: 'https://marketplace.canva.com/EAGa5ws4r-E/1/0/1131w/canva-documento-anuncio-para-ofrecer-servicios-de-plomer%C3%ADa-y-electricidad-en-casa-e-instalaciones-promoci%C3%B3n-azul-khWe0uQ-ikY.jpg',
             isImage: true,
             description: 'Ofrezco instalación profesional de sistemas de iluminación para hogares.',
             tags: ['Electricidad', 'Iluminación', 'Instalación'],
@@ -51,7 +51,7 @@ const fetchWorkerPosts = async (): Promise<WorkerPost[]> => {
         {
             postId: 'POST-003',
             title: 'Mantenimiento Eléctrico',
-            postContent: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/electrical-repair-service-ad-design-template-4c7a9b8e3f2e4e7a9a1e4f3b6c2a8e9d_screen.jpg?ts=1636984554',
+            postContent: 'https://marketplace.canva.com/EAF_zqQcVoI/1/0/900w/canva-historia-de-instagram-t%C3%A9cnico-para-el-hogar-simple-gris-y-amarillo-SZ_J0B12OMk.jpg',
             isImage: true,
             description: 'Mantenimiento preventivo para instalaciones eléctricas en edificios.',
             tags: ['Electricidad', 'Mantenimiento', 'Edificio'],

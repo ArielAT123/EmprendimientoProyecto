@@ -3,8 +3,13 @@ import tw from 'twrnc';
 import { MaterialIcons, FontAwesome, AntDesign } from '@expo/vector-icons';
 
 const WorkerProfileScreen = () => {
+
+  const meData={
+    id: "12345",
+  }
   // Datos de ejemplo
   const workerData = {
+    id: "12345",
     name: "Carlos Méndez",
     profession: "Electricista certificado",
     rating: 4.7,
@@ -140,6 +145,7 @@ const WorkerProfileScreen = () => {
       </View>
 
       {/* Botón de contacto */}
+      {workerData.id !== meData.id && (
       <View style={tw`px-4 pb-8`}>
         <TouchableOpacity 
           style={tw`bg-blue-600 py-3 rounded-full items-center justify-center shadow-md`}
@@ -148,6 +154,7 @@ const WorkerProfileScreen = () => {
           <Text style={tw`text-white font-bold text-lg`}>Contactar a {workerData.name.split(' ')[0]}</Text>
         </TouchableOpacity>
       </View>
+      )}
     </ScrollView>
   );
 };

@@ -86,7 +86,7 @@ export default function WorkersClientPostsDashboard() {
     <View style={tw`flex-1 bg-gray-50`}>
       {/* Header */}
       <View style={tw`bg-white px-5 py-4 rounded-b-lg shadow-sm py-2 mt-10`}>
-        <Text style={tw`text-2xl font-bold text-gray-900`}>Publicaciones</Text>
+        <Text style={tw`text-2xl font-bold text-gray-900`}>Publicaciones de clientes</Text>
         <Text style={tw`text-gray-500 mt-1`}>Encuentra trabajos disponibles</Text>
       </View>
 

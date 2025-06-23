@@ -3,12 +3,7 @@ import tw from 'twrnc';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HeaderHome } from '../../components/headerHome';
 
-export type RootStackParamList = {
-  Home: undefined;
-  HomeCliente: undefined;
-  TrabajadorTabs: undefined;
-  ClientDetails: { clientId: string };
-};
+import { RootStackParamList } from '../../navigation/types'; // Asegúrate de tener este archivo con tus tipos de navegación
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -38,6 +33,13 @@ const HomeScreen = () => {
               activeOpacity={0.7} // Optional: adds visual feedback
             >
               <Text style={tw`text-orange-500 text-lg font-semibold text-center`}>Trabajador</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={tw`mt-4 bg-white border border-red-500 rounded-lg p-4`}
+              onPress={() => navigation.navigate('CompanyScreen')}
+              activeOpacity={0.7} // Optional: adds visual feedback
+            >
+              <Text style={tw`text-red-500 text-lg font-semibold text-center`}>Empresa</Text>
             </TouchableOpacity>
           </View>
         </View>

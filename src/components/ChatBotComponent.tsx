@@ -108,7 +108,7 @@ const FloatingChatBot = () => {
         style={styles.fab}
         onPress={() => setModalVisible(true)}
       >
-        <Ionicons name="chatbubbles" size={24} color="white" />
+        <Ionicons name="logo-ionitron" size={24} color="white" />
       </TouchableOpacity>
 
       {/* Chat Modal */}
