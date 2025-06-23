@@ -1,11 +1,10 @@
-// screens/CompanyScreen.js
-import { View, Text, StyleSheet, ScrollView, Linking, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Linking, TouchableOpacity, Image} from 'react-native';
 
 const Afiliates = () => {
 
     const afiliados = [
-        { nombre: 'Afíliate a Empresa X', url: 'https://empresa-x.com/form' },
-        { nombre: 'Formulario de Empresa Y', url: 'https://empresa-y.com/registro' },
+        { nombre: 'Programador Senior /n Hola', url: 'https://empresa-x.com/form' },
+        { nombre: 'Programador Junior', url: 'https://empresa-y.com/registro' },
     ];
 
     return (
@@ -13,13 +12,24 @@ const Afiliates = () => {
 
       {/* Sección Afiliados */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Afíliate</Text>
+          <Text style={styles.sectionTitle}>¿Quierés ser parte de nosotros?</Text>
+            <Text style={styles.sectionText}>
+              Aqui encontraras las vacantes de empleos disponibles para que puedas unirte a nuestro equipo. Si estás interesado en unirte a nosotros, por favor completa el formulario de afiliación correspondiente.
+            </Text>
+
+            <Text>
+              Empleos publicados recientemente
+            </Text>
         {afiliados.map((item, idx) => (
           <TouchableOpacity
             key={idx}
             style={styles.linkButton}
             onPress={() => Linking.openURL(item.url)}
           >
+            <Image
+              source={{ uri: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png' }}
+              style={styles.avatar}
+            />
             <Text style={styles.linkText}>{item.nombre}</Text>
           </TouchableOpacity>
         ))}
@@ -33,6 +43,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+    sectionText: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#333',
+    marginBottom: 24,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+
+    },
 
   section: {
     padding: 16,
@@ -45,15 +64,21 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   linkButton: {
-    backgroundColor: '#000',
+    backgroundColor: '#eee',
     padding: 12,
-    borderRadius: 6,
-    marginBottom: 10,
+    marginTop: 15,
+    flexDirection: 'row',
+    alignContent: 'space-between',
+    alignItems: 'center',
+    
   },
   linkText: {
-    color: '#fff',
+    color: '#000',
     textAlign: 'center',
     fontWeight: '600',
+  },
+    avatar: {
+    width: 35, height: 35, borderRadius: 35,
   },
 });
 
