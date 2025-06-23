@@ -1,8 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Ionicons } from '@expo/vector-icons';
 import ClienteHomeScreen from '../views/cliente/ClienteHomeScreen';
 import ClienteJobsScreen from '../views/cliente/ClienteJobsScreen';
+import ProfileScreen from '../views/cliente/ProfileScreen'; // Asegúrate de que la ruta sea correcta
 
 const Tab = createBottomTabNavigator();
 
@@ -10,18 +11,18 @@ const TabNavigatorClientes = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+        tabBarIcon: ({ color, size }) => {
+          let iconName = '';
           if (route.name === 'ClienteHome') {
-            iconName = 'home';
+            iconName = 'home-outline';
           } else if (route.name === 'ClienteJobs') {
-            iconName = 'work';
+            iconName = 'briefcase-outline';
           } else if (route.name === 'Profile') {
-            iconName = 'person';
+            iconName = 'person-outline';
           }
-          return <MaterialIcons name={iconName!} size={size} color={color} />;
+          return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#FF5722',
+        tabBarActiveTintColor: '#2196F3', // Azul igual que trabajadores
         tabBarInactiveTintColor: '#757575',
         headerShown: false,
         tabBarStyle: {
@@ -32,7 +33,8 @@ const TabNavigatorClientes = () => {
           paddingTop: 5,
           height: 60,
         },
-      })}>
+      })}
+    >
       <Tab.Screen 
         name="ClienteHome" 
         component={ClienteHomeScreen}
@@ -42,6 +44,11 @@ const TabNavigatorClientes = () => {
         name="ClienteJobs" 
         component={ClienteJobsScreen}
         options={{ tabBarLabel: 'Mis Trabajos' }}
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileScreen}
+        options={{ tabBarLabel: 'Perfil' }}
       />
     </Tab.Navigator>
   );

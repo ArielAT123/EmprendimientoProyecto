@@ -40,9 +40,9 @@ const ClienteJobsScreen = ({ navigation }: any) => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'in_progress': return '#2196F3';
-      case 'waiting': return '#FF9800';
-      case 'completed': return '#4CAF50';
+      case 'in_progress': return '#1976D2'; // Azul fuerte
+      case 'waiting': return '#FFC107';     // Amarillo
+      case 'completed': return '#43A047';   // Verde
       default: return '#757575';
     }
   };
@@ -110,6 +110,8 @@ const ClienteJobsScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Espacio arriba del header */}
+      <View style={{ height: 24 }} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={24} color="#FFFFFF" />
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   header: {
-    backgroundColor: '#FF5722',
+    backgroundColor: '#2196F3', // Cambiado de naranja a azul
     padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FF5722',
+    color: '#2196F3', // Cambiado de naranja a azul
   },
 });
 

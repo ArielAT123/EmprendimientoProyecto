@@ -55,8 +55,8 @@ const ClienteHomeScreen = ({ navigation }: any) => {
   const renderWorkerCard = (worker: any) => (
     <TouchableOpacity key={worker.id} style={tw`bg-white rounded-xl p-4 mb-3 shadow-sm border border-gray-100`}>
       <View style={tw`flex-row`}>
-        <View style={tw`w-12 h-12 bg-blue-500 rounded-full items-center justify-center`}>
-          <Text style={tw`text-white font-bold text-lg`}>
+        <View style={tw`w-12 h-12 bg-blue-200 rounded-full items-center justify-center`}>
+          <Text style={tw`text-blue-800 font-bold text-lg`}>
             {worker.name.split(' ').map((n: string) => n[0]).join('')}
           </Text>
         </View>
@@ -64,7 +64,7 @@ const ClienteHomeScreen = ({ navigation }: any) => {
           <View style={tw`flex-row items-center`}>
             <Text style={tw`text-gray-900 font-semibold text-base flex-1`}>{worker.name}</Text>
             {worker.isPremium && (
-              <MaterialIcons name="verified" size={16} color="#FF5722" style={tw`ml-2`} />
+              <MaterialIcons name="verified" size={16} color="#2196F3" style={tw`ml-2`} />
             )}
           </View>
           <Text style={tw`text-gray-600 text-sm mt-1`}>{worker.profession}</Text>
@@ -76,7 +76,7 @@ const ClienteHomeScreen = ({ navigation }: any) => {
           <Text style={tw`text-gray-500 text-sm mt-1`}>📍 {worker.location}</Text>
         </View>
         <View style={tw`items-end justify-center`}>
-          <Text style={tw`text-orange-500 font-bold text-lg`}>${worker.price}</Text>
+          <Text style={tw`text-blue-500 font-bold text-lg`}>${worker.price}</Text>
           <Text style={tw`text-gray-500 text-xs`}>por trabajo</Text>
         </View>
       </View>
@@ -86,10 +86,11 @@ const ClienteHomeScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={tw`flex-1 bg-gray-100`}>
       {/* Header */}
-      <View style={tw`bg-orange-500 p-4`}>
+      <View style={tw`bg-blue-500 p-4`}>
         <View style={tw`flex-row justify-between items-center`}>
           <View>
-            <Text style={tw`text-white text-2xl font-bold`}>JOBBY</Text>
+            <Text style={tw`text-white text-1xl font-bold`}></Text>
+            <Text style={tw`text-white text-2xl font-bold`}>Buenos días, César</Text>
             <Text style={tw`text-white text-sm opacity-90`}>📍 Guayaquil, Ecuador</Text>
           </View>
           <View style={tw`flex-row items-center`}>
@@ -126,7 +127,7 @@ const ClienteHomeScreen = ({ navigation }: any) => {
           {categories.map((category) => (
             <TouchableOpacity
               key={category}
-              style={tw`${selectedCategory === category ? 'bg-orange-500' : 'bg-white'} px-4 py-2 rounded-full mr-2 border border-gray-100`}
+              style={tw`${selectedCategory === category ? 'bg-blue-500' : 'bg-white'} px-4 py-2 rounded-full mr-2 border border-gray-100`}
               onPress={() => setSelectedCategory(category)}>
               <Text style={tw`${selectedCategory === category ? 'text-white' : 'text-gray-600'} font-medium`}>
                 {category}
@@ -136,10 +137,10 @@ const ClienteHomeScreen = ({ navigation }: any) => {
         </ScrollView>
 
         {/* Sección de Emergencia */}
-        <View style={tw`mx-4 mb-6 p-4 bg-orange-50 rounded-xl border-l-4 border-orange-500`}>
-          <Text style={tw`text-orange-600 font-bold text-base mb-3`}>¿Necesitas ayuda urgente?</Text>
+        <View style={tw`mx-4 mb-6 p-4 bg-blue-50 rounded-xl border-l-4 border-red-500`}>
+          <Text style={tw`text-red-600 font-bold text-base mb-3`}>¿Necesitas ayuda urgente?</Text>
           <TouchableOpacity 
-            style={tw`bg-orange-500 flex-row items-center justify-center p-3 rounded-lg`}
+            style={tw`bg-red-500 flex-row items-center justify-center p-3 rounded-lg`}
             onPress={() => navigation.navigate('CreateJob')}>
             <MaterialIcons name="add" size={24} color="#FFFFFF" />
             <Text style={tw`text-white font-bold text-base ml-2`}>Crear Trabajo Urgente</Text>
