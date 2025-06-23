@@ -47,12 +47,29 @@ const fetchClientPosts = async (): Promise<ClientPost[]> => {
   ];
 };
 
+const useChatBotServices = () => {
+  const [services, setServices] = useState<string[]>([]);
+
+  const updateServices = (newServices: string[] = []) => {
+    setServices(prev => [...new Set([...prev, ...newServices])]);
+  };
+
+  const clearServices = () => {
+    setServices([]);
+  };
+
+  return { services, updateServices, clearServices };
+};
+
 export default function WorkersClientPostsDashboard() {
   const navigation = useNavigation<NavigationProp>();
   const [clientPosts, setClientPosts] = useState<ClientPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<ClientPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const chatBotServices = useChatBotServices();
+  const { services: recommendedServices, clearServices } = chatBotServices;
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -71,26 +88,51 @@ export default function WorkersClientPostsDashboard() {
   }, []);
 
   useEffect(() => {
-    if (searchQuery.trim() === '') {
+    if (searchQuery.trim() === '' && recommendedServices.length === 0) {
       setFilteredPosts(clientPosts);
-    } else {
-      const filtered = clientPosts.filter((post) =>
-        post.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        post.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredPosts(filtered);
+      return;
     }
-  }, [searchQuery, clientPosts]);
+
+    const searchTerms = searchQuery.toLowerCase().split(' ');
+    const recommendedTerms = recommendedServices.map(s => s.toLowerCase());
+
+    const filtered = clientPosts.filter((post) => {
+      const postContent = [
+        ...post.tags.map(t => t.toLowerCase()),
+        post.description.toLowerCase()
+      ].join(' ');
+
+      const matchesSearch = searchTerms.length === 0 || 
+        searchTerms.some(term => postContent.includes(term));
+
+      const matchesRecommended = recommendedTerms.length === 0 ||
+        post.tags.some(tag => 
+          recommendedTerms.some(service => 
+            tag.toLowerCase().includes(service)
+          )
+        );
+
+      return matchesSearch && matchesRecommended;
+    });
+
+    setFilteredPosts(filtered);
+  }, [searchQuery, clientPosts, recommendedServices]);
+
+  const applyRecommendedFilter = (service: string) => {
+    setSearchQuery(prev => {
+      const services = new Set(prev.split(' ').filter(s => s.trim()));
+      services.add(service);
+      return Array.from(services).join(' ');
+    });
+  };
 
   return (
     <View style={tw`flex-1 bg-gray-50`}>
-      {/* Header */}
       <View style={tw`bg-white px-5 py-4 rounded-b-lg shadow-sm py-2 mt-10`}>
         <Text style={tw`text-2xl font-bold text-gray-900`}>Publicaciones de clientes</Text>
         <Text style={tw`text-gray-500 mt-1`}>Encuentra trabajos disponibles</Text>
       </View>
 
-      {/* Search Bar */}
       <View style={tw`px-5 py-4 bg-white`}>
         <View style={tw`relative`}>
           <TextInput
@@ -109,9 +151,31 @@ export default function WorkersClientPostsDashboard() {
             </TouchableOpacity>
           )}
         </View>
+        
+        {recommendedServices.length > 0 && (
+          <View style={tw`mt-3`}>
+            <Text style={tw`text-sm text-gray-500 mb-1`}>Servicios recomendados:</Text>
+            <View style={tw`flex-row flex-wrap`}>
+              {recommendedServices.map((service, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={tw`bg-blue-100 rounded-full px-3 py-1 mr-2 mb-2`}
+                  onPress={() => applyRecommendedFilter(service)}
+                >
+                  <Text style={tw`text-blue-700 text-xs`}>{service}</Text>
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity
+                style={tw`bg-gray-200 rounded-full px-3 py-1 mr-2 mb-2`}
+                onPress={clearServices}
+              >
+                <Text style={tw`text-gray-700 text-xs`}>Limpiar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
       </View>
 
-      {/* Content */}
       <ScrollView contentContainerStyle={tw`pb-6 py-4`}>
         {isLoading ? (
           <View style={tw`mt-6 px-5`}>
@@ -171,7 +235,6 @@ export default function WorkersClientPostsDashboard() {
 
                 <Text style={tw`text-gray-600 mb-3`}>{post.description}</Text>
 
-                {/* Tags */}
                 <View style={tw`flex-row flex-wrap mb-4`}>
                   {post.tags.map((tag, tagIndex) => (
                     <TouchableOpacity
@@ -195,7 +258,8 @@ export default function WorkersClientPostsDashboard() {
           </View>
         )}
       </ScrollView>
-        <FloatingChatBot></FloatingChatBot>
+      
+      <FloatingChatBot chatBotServices={chatBotServices} />
     </View>
   );
 }

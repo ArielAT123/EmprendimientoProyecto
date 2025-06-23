@@ -11,8 +11,8 @@ import {
   Dimensions,
   StyleSheet 
 } from 'react-native';
-import tw from 'twrnc';
 import { Ionicons } from '@expo/vector-icons';
+import { sendMessageToDialogflow } from '../apis/chatbot';
 
 const { width } = Dimensions.get('window');
 
@@ -21,6 +21,7 @@ type Message = {
   text: string;
   isUser: boolean;
   timestamp: string;
+  servicios?: string[];
 };
 
 const getFormattedTimestamp = () => {
@@ -28,7 +29,15 @@ const getFormattedTimestamp = () => {
   return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
-const FloatingChatBot = () => {
+interface FloatingChatBotProps {
+  chatBotServices: {
+    services: string[];
+    updateServices: (newServices: string[]) => void;
+  };
+}
+
+const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) => {
+  const { updateServices } = chatBotServices;
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([
@@ -44,8 +53,7 @@ const FloatingChatBot = () => {
 
   const handleSend = async () => {
     if (!message.trim()) return;
-
-    // Add user message
+    
     const userMessage: Message = { 
       id: Date.now().toString(), 
       text: message, 
@@ -56,35 +64,34 @@ const FloatingChatBot = () => {
     setMessage('');
     setIsTyping(true);
 
-    // Simulate typing delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Generate bot response
-    const userInput = message.toLowerCase();
-    let botResponse = '';
-
-    if (userInput.includes('hola') || userInput.includes('hey')) {
-      botResponse = '¡Hola! ¿Cómo estás? Cuéntame, ¿qué necesitas hoy?';
-    } else if (userInput.includes('gracias')) {
-      botResponse = '¡De nada! ¿Hay algo más en lo que pueda ayudarte?';
-    } else if (userInput.includes('adiós') || userInput.includes('chao')) {
-      botResponse = '¡Hasta luego! No dudes en volver si necesitas más ayuda.';
-    } else {
-      // Default response for other messages
-      botResponse = 'Entiendo que necesitas ayuda. Por favor, descríbeme con más detalles lo que necesitas para poder asistirte mejor.';
+    try {
+      const response = await sendMessageToDialogflow(message);
+      
+      const botMessage = { 
+        id: (Date.now() + 1).toString(), 
+        text: response.fulfillmentText, 
+        isUser: false, 
+        timestamp: getFormattedTimestamp(),
+        servicios: response.servicios
+      };
+      
+      setMessages(prev => [...prev, botMessage]);
+      
+      if (response.servicios && response.servicios.length > 0) {
+        updateServices(response.servicios);
+      }
+    } catch (error) {
+      setMessages(prev => [...prev, { 
+        id: (Date.now() + 1).toString(), 
+        text: 'Lo siento, ocurrió un error al procesar tu solicitud.', 
+        isUser: false, 
+        timestamp: getFormattedTimestamp() 
+      }]);
+    } finally {
+      setIsTyping(false);
     }
-
-    // Add bot response
-    setMessages(prev => [...prev, { 
-      id: (Date.now() + 1).toString(), 
-      text: botResponse, 
-      isUser: false, 
-      timestamp: getFormattedTimestamp() 
-    }]);
-    setIsTyping(false);
   };
 
-  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (flatListRef.current && messages.length > 0) {
       flatListRef.current.scrollToEnd({ animated: true });
@@ -97,21 +104,33 @@ const FloatingChatBot = () => {
       item.isUser ? styles.userMessage : styles.botMessage
     ]}>
       <Text style={styles.messageText}>{item.text}</Text>
+      
+      {item.servicios && item.servicios.length > 0 && (
+        <View style={styles.servicesContainer}>
+          <Text style={styles.servicesTitle}>Servicios recomendados:</Text>
+          <View style={styles.servicesTagsContainer}>
+            {item.servicios.map((servicio, index) => (
+              <View key={index} style={styles.serviceTag}>
+                <Text style={styles.serviceText}>{servicio}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+      
       <Text style={styles.timestamp}>{item.timestamp}</Text>
     </View>
   );
 
   return (
     <>
-      {/* Floating Action Button */}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => setModalVisible(true)}
       >
-        <Ionicons name="logo-ionitron" size={24} color="white" />
+        <Ionicons name="chatbubble-ellipses" size={24} color="white" />
       </TouchableOpacity>
 
-      {/* Chat Modal */}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -124,7 +143,6 @@ const FloatingChatBot = () => {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.chatContainer}>
-              {/* Header */}
               <View style={styles.header}>
                 <Text style={styles.headerText}>Asistente Virtual</Text>
                 <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -132,7 +150,6 @@ const FloatingChatBot = () => {
                 </TouchableOpacity>
               </View>
 
-              {/* Messages List */}
               <FlatList
                 ref={flatListRef}
                 data={messages}
@@ -142,14 +159,12 @@ const FloatingChatBot = () => {
                 contentContainerStyle={styles.messagesContent}
               />
 
-              {/* Typing Indicator */}
               {isTyping && (
                 <View style={styles.typingIndicator}>
                   <Text style={styles.typingText}>Asistente está escribiendo...</Text>
                 </View>
               )}
 
-              {/* Input Area */}
               <View style={styles.inputContainer}>
                 <TextInput
                   placeholder="Escribe tu mensaje..."
@@ -161,15 +176,11 @@ const FloatingChatBot = () => {
                   onSubmitEditing={handleSend}
                 />
                 <TouchableOpacity
-                  style={styles.sendButton}
+                  style={[styles.sendButton, !message.trim() && styles.disabledButton]}
                   onPress={handleSend}
                   disabled={!message.trim()}
                 >
-                  <Ionicons 
-                    name="send" 
-                    size={20} 
-                    color={message.trim() ? "white" : "#d1d5db"} 
-                  />
+                  <Ionicons name="send" size={20} color="white" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -251,6 +262,35 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#111827',
   },
+  servicesContainer: {
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    paddingTop: 8,
+  },
+  servicesTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#4b5563',
+    marginBottom: 4,
+  },
+  servicesTagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 4,
+  },
+  serviceTag: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginRight: 6,
+    marginBottom: 4,
+  },
+  serviceText: {
+    fontSize: 12,
+    color: '#111827',
+  },
   timestamp: {
     fontSize: 10,
     color: '#6b7280',
@@ -291,6 +331,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
+  },
+  disabledButton: {
+    backgroundColor: '#9ca3af',
   },
 });
 
