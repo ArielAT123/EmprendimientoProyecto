@@ -5,7 +5,7 @@ type DialogflowResponse = {
 
 export const sendMessageToDialogflow = async (message: string): Promise<DialogflowResponse> => {
   try {
-    const response = await fetch('http://172.20.132.76:3000/api/dialogflow/message', {
+    const response = await fetch('http://172.19.57.140:3000/api/dialogflow/message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

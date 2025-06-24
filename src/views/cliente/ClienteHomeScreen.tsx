@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import tw from 'twrnc';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FloatingChatBot from '../../components/ChatBotComponent';
 
 const ClienteHomeScreen = ({ navigation }: any) => {
   const [searchText, setSearchText] = useState('');
@@ -153,6 +154,12 @@ const ClienteHomeScreen = ({ navigation }: any) => {
           {mockWorkers.map(renderWorkerCard)}
         </View>
       </ScrollView>
+      <FloatingChatBot chatBotServices={{
+        services: [],
+        updateServices: function (newServices: string[]): void {
+          throw new Error('Function not implemented.');
+        }
+      }} ></FloatingChatBot>
     </SafeAreaView>
   );
 };
