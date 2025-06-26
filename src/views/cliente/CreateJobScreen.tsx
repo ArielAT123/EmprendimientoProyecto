@@ -93,11 +93,11 @@ const CreateJobScreen = ({ navigation }: any) => {
 
         <View style={tw`mb-6`}>
           <Text style={tw`text-gray-900 text-base font-bold mb-2`}>Categoría</Text>
-          <View style={tw`flex-row flex-wrap`}>
+          <View style={tw`flex-row items-center justify-center flex-wrap `}>
             {categories.map((category) => (
               <TouchableOpacity
                 key={category.id}
-                style={tw`${selectedCategory === category.id ? 'bg-orange-500 border-orange-500' : 'bg-orange-50 border-orange-50'} border-2 rounded-xl p-4 items-center mr-3 mb-3 w-42`}
+                style={tw`${selectedCategory === category.id ? 'bg-orange-500 border-orange-500' : 'bg-orange-50 border-orange-50'} border-2 rounded-xl p-4 items-center mr-3 mb-3 w-35`}
                 onPress={() => setSelectedCategory(category.id)}>
                 <MaterialIcons
                   name={category.icon as any}
