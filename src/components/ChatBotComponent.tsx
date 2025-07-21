@@ -81,12 +81,7 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
         updateServices(response.servicios);
       }
     } catch (error) {
-      setMessages(prev => [...prev, { 
-        id: (Date.now() + 1).toString(), 
-        text: 'Lo siento, ocurrió un error al procesar tu solicitud.', 
-        isUser: false, 
-        timestamp: getFormattedTimestamp() 
-      }]);
+      console.error('Error al enviar el mensaje:', error);
     } finally {
       setIsTyping(false);
     }
@@ -293,7 +288,7 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 10,
-    color: '#6b7280',
+    color: '#000000',
     marginTop: 4,
     alignSelf: 'flex-end',
   },

@@ -2,10 +2,9 @@ type DeepSeekResponse = {
   fulfillmentText: string;
   servicios?: string[];
 };
-
 export const sendMessageToDialogflow = async (message: string): Promise<DeepSeekResponse> => {
   try {
-    const response = await fetch('http://192.168.214.137:3000/api/deepseek/message', {
+    const response = await fetch('http://172.19.180.197:3000/api/deepseek/message', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: message }), // Asegúrate de enviar "text"
@@ -14,7 +13,6 @@ export const sendMessageToDialogflow = async (message: string): Promise<DeepSeek
     if (!response.ok) {
       throw new Error('Error en la respuesta de la API');
     }
-
     const data: DeepSeekResponse = await response.json();
     return data;
   } catch (error) {

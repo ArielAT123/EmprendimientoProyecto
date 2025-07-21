@@ -24,16 +24,11 @@ const TabNavigatorClientes = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#2196F3', // Azul igual que trabajadores
-        tabBarInactiveTintColor: '#757575',
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopWidth: 1,
+          backgroundColor: '#000000',
           borderTopColor: '#E0E0E0',
-          paddingBottom: 5,
-          paddingTop: 5,
-          height: 60,
+          paddingVertical: 10,
         },
       })}
     >
