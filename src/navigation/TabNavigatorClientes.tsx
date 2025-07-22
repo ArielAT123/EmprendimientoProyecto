@@ -3,9 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import ClienteHomeScreen from '../views/cliente/ClienteHomeScreen';
 import ClienteJobsScreen from '../views/cliente/ClienteJobsScreen';
-import ProfileScreen from '../views/cliente/ProfileScreen'; // Asegúrate de que la ruta sea correcta
+import ProfileScreen from '../views/cliente/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
+
+const pastelOrange = '#FFB074'; // Naranja pastel
+const pastelOrangeDark = '#FF8C42'; // Naranja pastel más oscuro
+const pastelOrangeLight = '#FFE5CF'; // Naranja pastel muy claro
 
 const TabNavigatorClientes = () => {
   return (
@@ -24,11 +28,15 @@ const TabNavigatorClientes = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
+        tabBarActiveTintColor: pastelOrangeDark,
+        tabBarInactiveTintColor: '#B0B0B0',
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#000000',
-          borderTopColor: '#E0E0E0',
+          backgroundColor: '#FFFFFF',
+          borderTopColor: pastelOrangeLight,
+          borderTopWidth: 2,
           paddingVertical: 10,
+          height: 60,
         },
       })}
     >

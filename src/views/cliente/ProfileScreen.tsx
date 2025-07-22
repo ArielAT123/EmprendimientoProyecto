@@ -6,20 +6,21 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { ORANGE_PRIMARY, ORANGE_DARK, ORANGE_LIGHTER, ORANGE_ACCENT, ORANGE_DARKER, mockWorkers } from './Datos/datos';
 
 const COLORS = {
-  orange: '#FF5722',
-  blue: '#2196F3',
-  blueLight: '#64B5F6',
+  orange: ORANGE_PRIMARY,
+  orangeDark: ORANGE_DARK,
+  orangeLighter: ORANGE_LIGHTER,
   white: '#FFFFFF',
   gray: '#9E9E9E',
   lightGray: '#F5F5F5',
   darkGray: '#424242',
   red: '#F44336',
   green: '#4CAF50',
-  yellow: '#FFC107',
 };
 
 interface MenuItem {
@@ -42,6 +43,11 @@ const ProfileScreen: React.FC = () => {
     { icon: 'notifications', label: 'Notificaciones' },
     { icon: 'help', label: 'Ayuda y Soporte' },
   ];
+
+  const initials = user.name
+    .split(' ')
+    .map((name: string) => name[0])
+    .join('');
 
   const handleMenuPress = (item: MenuItem) => {
     if (item.label === 'Verificación de Identidad') {
@@ -102,70 +108,151 @@ const ProfileScreen: React.FC = () => {
     );
   };
 
-  const initials = user.name
-    .split(' ')
-    .map((name: string) => name[0])
-    .join('');
+  // Busca el usuario en mockWorkers por nombre (o id si lo prefieres)
+  const userWorker = mockWorkers.find(w => w.name === user.name);
+
+  // Usa la URL fija para la foto de perfil
+  const profileImage = 'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg';
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Profile Header */}
-      <View style={styles.profileCard}>
-        <View style={styles.profileHeader}>
-          <View style={styles.avatarContainer}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>{initials}</Text>
-            </View>
-            <View style={styles.userInfo}>
-              <Text style={styles.userName}>{user.name}</Text>
-              <Text style={styles.userEmail}>{user.email}</Text>
-              <Text style={styles.userLocation}>{user.location}</Text>
-            </View>
+    <ScrollView style={{ flex: 1, backgroundColor: COLORS.white }} showsVerticalScrollIndicator={false}>
+      {/* Header estilo ClienteHomeScreen */}
+      <View
+        style={{
+          padding: 16,
+          backgroundColor: COLORS.white,
+          borderBottomLeftRadius: 24,
+          borderBottomRightRadius: 24,
+          shadowColor: ORANGE_PRIMARY,
+          shadowOpacity: 0.15,
+          shadowRadius: 8,
+          shadowOffset: { width: 0, height: 4 },
+          elevation: 8,
+        }}
+      >
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View>
+            <Text style={{ color: '#111', fontSize: 24, fontWeight: 'bold' }}>
+              Mi Perfil
+            </Text>
+            <Text style={{ color: '#111', fontSize: 14, opacity: 0.9 }}>
+              📍 {user.location}
+            </Text>
           </View>
-          <TouchableOpacity style={styles.editButton}>
-            <Icon name="edit" size={20} color={COLORS.blue} />
+          {/* Elimina TouchableOpacity y muestra solo la imagen */}
+          <Image
+            source={{ uri: profileImage }}
+            style={{ width: 40, height: 40, borderRadius: 20, marginLeft: 8 }}
+            resizeMode="cover"
+          />
+        </View>
+      </View>
+
+      {/* Profile Card */}
+      <View style={{
+        backgroundColor: COLORS.white,
+        marginHorizontal: 20,
+        marginTop: 20,
+        marginBottom: 24,
+        borderRadius: 16,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
+        elevation: 5,
+      }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+          {/* Elimina TouchableOpacity y muestra solo la imagen */}
+          <Image
+            source={{ uri: profileImage }}
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 40,
+              marginRight: 16,
+              borderWidth: 2,
+              borderColor: ORANGE_PRIMARY,
+            }}
+            resizeMode="cover"
+          />
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: ORANGE_DARK, marginBottom: 4 }}>{user.name}</Text>
+            <Text style={{ fontSize: 14, color: COLORS.gray, marginBottom: 2 }}>{user.email}</Text>
+            <Text style={{ fontSize: 12, color: COLORS.gray }}>{user.location}</Text>
+          </View>
+          <TouchableOpacity style={{ padding: 8 }}>
+            <Icon name="edit" size={20} color={ORANGE_PRIMARY} />
           </TouchableOpacity>
         </View>
 
         {/* User Stats */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>12</Text>
-            <Text style={styles.statLabel}>Trabajos Publicados</Text>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          paddingTop: 20,
+          borderTopWidth: 1,
+          borderTopColor: COLORS.lightGray,
+        }}>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: ORANGE_PRIMARY, marginBottom: 4 }}>12</Text>
+            <Text style={{ fontSize: 10, color: COLORS.gray, textAlign: 'center' }}>Trabajos Publicados</Text>
           </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>8</Text>
-            <Text style={styles.statLabel}>Completados</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: ORANGE_PRIMARY, marginBottom: 4 }}>8</Text>
+            <Text style={{ fontSize: 10, color: COLORS.gray, textAlign: 'center' }}>Completados</Text>
           </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>4.9</Text>
-            <Text style={styles.statLabel}>Calificación</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: ORANGE_PRIMARY, marginBottom: 4 }}>4.9</Text>
+            <Text style={{ fontSize: 10, color: COLORS.gray, textAlign: 'center' }}>Calificación</Text>
           </View>
         </View>
 
         {/* Verification Status */}
-        <View style={styles.verificationStatus}>
-          <View style={styles.verificationItem}>
-            <Icon name="warning" size={16} color={COLORS.orange} />
-            <Text style={styles.verificationText}>Identidad no verificada</Text>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingTop: 16,
+          marginTop: 16,
+          borderTopWidth: 1,
+          borderTopColor: COLORS.lightGray,
+        }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon name="warning" size={16} color={ORANGE_PRIMARY} />
+            <Text style={{ fontSize: 14, color: ORANGE_DARK, marginLeft: 8 }}>Identidad no verificada</Text>
           </View>
-          <TouchableOpacity onPress={showVerificationModal}>
-            <Text style={styles.verifyButton}>Verificar ahora</Text>
+          <TouchableOpacity onPress={() => handleMenuPress({ icon: 'verified-user', label: 'Verificación de Identidad' })}>
+            <Text style={{ fontSize: 14, color: ORANGE_PRIMARY, fontWeight: '500' }}>Verificar ahora</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Menu Items */}
-      <View style={styles.menuContainer}>
+      <View style={{ paddingHorizontal: 20, paddingBottom: 100 }}>
         {menuItems.map((item, index) => (
           <TouchableOpacity
             key={index}
-            style={styles.menuItem}
+            style={{
+              backgroundColor: COLORS.white,
+              borderRadius: 12,
+              marginBottom: 8,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.1,
+              shadowRadius: 2,
+              elevation: 2,
+            }}
             onPress={() => handleMenuPress(item)}>
-            <View style={styles.menuItemContent}>
-              <View style={styles.menuItemLeft}>
-                <Icon name={item.icon} size={24} color={COLORS.blue} />
-                <Text style={styles.menuItemText}>{item.label}</Text>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: 16,
+            }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Icon name={item.icon} size={24} color={ORANGE_PRIMARY} />
+                <Text style={{ fontSize: 16, color: ORANGE_DARKER, marginLeft: 12, fontWeight: '500' }}>{item.label}</Text>
               </View>
               <Icon name="chevron-right" size={24} color={COLORS.gray} />
             </View>
@@ -173,11 +260,28 @@ const ProfileScreen: React.FC = () => {
         ))}
 
         {/* Logout Button */}
-        <TouchableOpacity style={styles.logoutItem} onPress={handleLogout}>
-          <View style={styles.menuItemContent}>
-            <View style={styles.menuItemLeft}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: COLORS.white,
+            borderRadius: 12,
+            marginTop: 16,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.1,
+            shadowRadius: 2,
+            elevation: 2,
+          }}
+          onPress={handleLogout}
+        >
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 16,
+          }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Icon name="logout" size={24} color={COLORS.red} />
-              <Text style={[styles.menuItemText, styles.logoutText]}>
+              <Text style={{ fontSize: 16, color: COLORS.red, marginLeft: 12, fontWeight: '500' }}>
                 Cerrar Sesión
               </Text>
             </View>
@@ -188,173 +292,5 @@ const ProfileScreen: React.FC = () => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.lightGray,
-  },
-  profileCard: {
-    backgroundColor: COLORS.white,
-    marginHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 24,
-    borderRadius: 16,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  profileHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  avatarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    backgroundColor: COLORS.orange,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  avatarText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.white,
-  },
-  userInfo: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: COLORS.darkGray,
-    marginBottom: 4,
-  },
-  userEmail: {
-    fontSize: 14,
-    color: COLORS.gray,
-    marginBottom: 2,
-  },
-  userLocation: {
-    fontSize: 12,
-    color: COLORS.gray,
-  },
-  editButton: {
-    padding: 8,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.lightGray,
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.blue,
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 10,
-    color: COLORS.gray,
-    textAlign: 'center',
-  },
-  menuContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 100,
-  },
-  menuItem: {
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  logoutItem: {
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-    marginTop: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  menuItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-  },
-  menuItemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  menuItemText: {
-    fontSize: 16,
-    color: COLORS.darkGray,
-    marginLeft: 12,
-    fontWeight: '500',
-  },
-  logoutText: {
-    color: COLORS.red,
-  },
-  errorText: {
-    textAlign: 'center',
-    color: COLORS.gray,
-    fontSize: 16,
-    marginTop: 50,
-  },
-  verificationStatus: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 16,
-    marginTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.lightGray,
-  },
-  verificationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  verificationText: {
-    fontSize: 14,
-    color: COLORS.darkGray,
-    marginLeft: 8,
-  },
-  verifyButton: {
-    fontSize: 14,
-    color: COLORS.blue,
-    fontWeight: '500',
-  },
-});
 
 export default ProfileScreen;
