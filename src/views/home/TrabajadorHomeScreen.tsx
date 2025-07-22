@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 import React, { useState, useEffect } from 'react';
 import FloatingChatBot from '../../components/ChatBotComponent';
-import { ORANGE_PRIMARY, ORANGE_LIGHTER, ORANGE_ACCENT, ORANGE_DARK, ORANGE_DARKER } from '../../views/cliente/Datos/datos';
+import { ORANGE_PRIMARY, ORANGE_LIGHTER, ORANGE_ACCENT, ORANGE_DARK, ORANGE_DARKER, hombreFotos, mujerFotos } from '../../views/cliente/Datos/datos';
 import { Ionicons } from '@expo/vector-icons';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -68,7 +68,7 @@ export default function WorkersClientPostsDashboard() {
   const [filteredPosts, setFilteredPosts] = useState<ClientPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const chatBotServices = useChatBotServices();
   const { services: recommendedServices, clearServices } = chatBotServices;
 
@@ -103,12 +103,12 @@ export default function WorkersClientPostsDashboard() {
         post.description.toLowerCase()
       ].join(' ');
 
-      const matchesSearch = searchTerms.length === 0 || 
+      const matchesSearch = searchTerms.length === 0 ||
         searchTerms.some(term => postContent.includes(term));
 
       const matchesRecommended = recommendedTerms.length === 0 ||
-        post.tags.some(tag => 
-          recommendedTerms.some(service => 
+        post.tags.some(tag =>
+          recommendedTerms.some(service =>
             tag.toLowerCase().includes(service)
           )
         );
@@ -140,7 +140,7 @@ export default function WorkersClientPostsDashboard() {
         <Text style={tw`text-white text-lg opacity-90`}>
           Encuentra trabajos disponibles
         </Text>
-        
+
         {/* Decorative elements */}
         <View style={[
           tw`absolute -top-5 -right-5 w-20 h-20 rounded-full opacity-20`,
@@ -176,13 +176,13 @@ export default function WorkersClientPostsDashboard() {
               <Text style={[tw`text-lg font-bold`, { color: ORANGE_DARK }]}>×</Text>
             </TouchableOpacity>
           )}
-          
+
           {/* Search icon */}
           <View style={tw`absolute left-4 top-4`}>
             <Text style={tw`text-gray-400 text-lg`}></Text>
           </View>
         </View>
-        
+
         {/* Recommended Services */}
         {recommendedServices.length > 0 && (
           <View>
@@ -215,7 +215,7 @@ export default function WorkersClientPostsDashboard() {
         )}
       </View>
 
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={tw`pb-8 px-4`}
         showsVerticalScrollIndicator={false}
       >
@@ -250,7 +250,7 @@ export default function WorkersClientPostsDashboard() {
             <Text style={tw`text-gray-400 text-center mb-6`}>
               para "{searchQuery}"
             </Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => setSearchQuery('')}
               style={[
                 tw`px-6 py-3 rounded-xl shadow-sm`,
@@ -265,19 +265,21 @@ export default function WorkersClientPostsDashboard() {
         ) : (
           <View style={tw`mt-4`}>
             {filteredPosts.map((post, index) => (
-              <View 
-                key={index} 
+              <View
+                key={index}
                 style={tw`bg-white rounded-2xl shadow-md p-6 mb-6 border border-gray-100`}
               >
                 {/* Client Info */}
                 <View style={tw`flex-row mb-4`}>
                   <View style={[
-                    tw`w-14 h-14 rounded-2xl items-center justify-center mr-4 shadow-sm`,
+                    tw`w-14 h-14 rounded-full items-center justify-center mr-4 shadow-sm`,
                     { backgroundColor: ORANGE_LIGHTER }
                   ]}>
-                    <Text style={[tw`font-bold text-xl`, { color: ORANGE_DARKER }]}>
-                      {post.clientName.charAt(0)}
-                    </Text>
+                    <Image
+                      source={hombreFotos.length > 0 ? { uri: hombreFotos[index % hombreFotos.length] } : require('../../../assets/jobby.jpg')}
+                      style={tw`w-full h-full rounded-full`}
+                      resizeMode="contain"
+                    />
                   </View>
                   <View style={tw`flex-1`}>
                     <Text style={tw`font-bold text-gray-900 text-lg`}>
@@ -287,14 +289,14 @@ export default function WorkersClientPostsDashboard() {
                       ID: {post.clientId}
                     </Text>
                   </View>
-                  
+
                   {/* Priority indicator */}
                   {post.tags.includes('Urgente') && (
                     <View style={[
                       tw`px-3 py-3 rounded-full`,
                       { backgroundColor: ORANGE_DARK }
                     ]}>
-                      <Ionicons name={"alert-circle-outline"} size={30} color={"white"}/>
+                      <Ionicons name={"alert-circle-outline"} size={30} color={"white"} />
                     </View>
                   )}
                 </View>
@@ -331,9 +333,9 @@ export default function WorkersClientPostsDashboard() {
                       key={tagIndex}
                       style={[
                         tw`rounded-full px-4 py-2 mr-2 mb-2 border`,
-                        { 
+                        {
                           backgroundColor: tag === 'Urgente' ? ORANGE_DARK : 'white',
-                          borderColor: ORANGE_PRIMARY 
+                          borderColor: ORANGE_PRIMARY
                         }
                       ]}
                       onPress={() => setSearchQuery(tag)}
@@ -365,7 +367,7 @@ export default function WorkersClientPostsDashboard() {
           </View>
         )}
       </ScrollView>
-      
+
       <FloatingChatBot chatBotServices={chatBotServices} />
     </View>
   );

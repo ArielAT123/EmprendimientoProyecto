@@ -14,7 +14,7 @@ const { width, height } = Dimensions.get('window');
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  
+
   // Animaciones
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -73,7 +73,7 @@ const HomeScreen = () => {
         },
         tw`opacity-30`
       ]} />
-      
+
       {/* Círculos decorativos */}
       <View style={[
         {
@@ -87,7 +87,7 @@ const HomeScreen = () => {
         },
         tw`opacity-20`
       ]} />
-      
+
       <View style={[
         {
           position: 'absolute',
@@ -102,9 +102,9 @@ const HomeScreen = () => {
       ]} />
 
       <HeaderHome />
-      
+
       <View style={tw`flex-1 px-6 py-8 justify-center`}>
-        <Animated.View 
+        <Animated.View
           style={[
             tw`items-center`,
             {
@@ -138,7 +138,7 @@ const HomeScreen = () => {
               },
               tw`opacity-30 absolute top-0 left-0 right-0`
             ]} />
-            
+
             <View style={tw`p-8 pt-12`}>
               {/* Título con mejor tipografía */}
               <Text style={[
@@ -148,14 +148,14 @@ const HomeScreen = () => {
                 ¡Bienvenido a{' '}
                 <Text style={{ color: pastelOrangeDark }}>JOBBY</Text>!
               </Text>
-              
+
               <Text style={[
                 tw`text-base text-gray-600 mb-8 text-center leading-6`,
                 { lineHeight: 24 }
               ]}>
                 Conecta con clientes o encuentra trabajadores para tus necesidades de manera fácil y rápida.
               </Text>
-              
+
               {/* Botones mejorados con animaciones */}
               <View style={tw`w-full flex-column`}>
                 {/* Botón Cliente */}
@@ -190,22 +190,14 @@ const HomeScreen = () => {
                       },
                       tw`opacity-10`
                     ]} />
-                    
+
                     <View style={tw`flex-row items-center justify-center`}>
-                      <View style={[
-                        tw`w-3 h-3 rounded-full mr-3`,
-                        { 
-                          backgroundColor: pastelOrangeDark,
-                          shadowColor: pastelOrangeDark, 
-                          shadowOpacity: 0.3, 
-                          shadowRadius: 4 
-                        }
-                      ]} />
+
                       <Text style={[
                         tw`text-xl font-bold`,
-                        { 
+                        {
                           letterSpacing: 0.5,
-                          color: pastelOrangeDark 
+                          color: pastelOrangeDark
                         }
                       ]}>
                         Cliente
@@ -245,22 +237,14 @@ const HomeScreen = () => {
                       },
                       tw`opacity-10`
                     ]} />
-                    
+
                     <View style={tw`flex-row items-center justify-center`}>
-                      <View style={[
-                        tw`w-3 h-3 rounded-full mr-3`,
-                        { 
-                          backgroundColor: pastelOrangeDark ,
-                          shadowColor: pastelOrange, 
-                          shadowOpacity: 0.3, 
-                          shadowRadius: 4 
-                        }
-                      ]} />
+
                       <Text style={[
                         tw`text-xl font-bold`,
-                        { 
+                        {
                           letterSpacing: 0.5,
-                          color: pastelOrangeDark  
+                          color: pastelOrangeDark
                         }
                       ]}>
                         Trabajador
@@ -276,8 +260,8 @@ const HomeScreen = () => {
                       tw`bg-white rounded-2xl p-5 mt-2 relative overflow-hidden`,
                       {
                         borderWidth: 2,
-                        borderColor: pastelOrangeDark , // Gris elegante para empresa
-                        shadowColor: pastelOrangeDark ,
+                        borderColor: pastelOrangeDark, // Gris elegante para empresa
+                        shadowColor: pastelOrangeDark,
                         shadowOffset: { width: 0, height: 4 },
                         shadowOpacity: 0.15,
                         shadowRadius: 8,
@@ -296,26 +280,18 @@ const HomeScreen = () => {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: pastelOrangeDark ,
+                        backgroundColor: pastelOrangeDark,
                       },
                       tw`opacity-5`
                     ]} />
-                    
+
                     <View style={tw`flex-row items-center justify-center`}>
-                      <View style={[
-                        tw`w-3 h-3 rounded-full mr-3`,
-                        { 
-                          backgroundColor: pastelOrangeDark ,
-                          shadowColor: pastelOrangeDark , 
-                          shadowOpacity: 0.3, 
-                          shadowRadius: 4 
-                        }
-                      ]} />
+
                       <Text style={[
                         tw`text-xl font-bold`,
-                        { 
+                        {
                           letterSpacing: 0.5,
-                          color:pastelOrangeDark  
+                          color: pastelOrangeDark
                         }
                       ]}>
                         Empresa
@@ -324,7 +300,7 @@ const HomeScreen = () => {
                   </TouchableOpacity>
                 </Animated.View>
               </View>
-              
+
               {/* Footer decorativo */}
               <View style={tw`mt-8 pt-6 border-t border-gray-100`}>
                 <Text style={tw`text-center text-gray-400 text-sm`}>

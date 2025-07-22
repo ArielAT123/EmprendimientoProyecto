@@ -99,7 +99,7 @@ const ClienteJobsScreen = ({ navigation }: any) => {
         <Text style={tw`text-base font-bold text-[${ORANGE_DARK}]`}>${item.budget}</Text>
       </View>
       {/* Trabajador o propuestas y botón */}
-      <View style={tw`flex-row justify-between items-center`}>
+      <TouchableOpacity style={tw`flex-row justify-between items-center`}>
         {item.worker ? (
           <View style={tw`flex-row items-center flex-1`}>
             <Image
@@ -119,21 +119,13 @@ const ClienteJobsScreen = ({ navigation }: any) => {
             {item.proposalsCount} propuestas recibidas
           </Text>
         )}
-        <TouchableOpacity
-          style={tw`px-3 py-1`}
-          onPress={() => {
-            if (!item.worker && item.proposalsCount > 0) {
-              handleViewProposals(item);
-            }
-            if (item.worker) {
-              handleViewDetails(item);
-            }
-          }}>
+        <View
+          style={tw`px-3 py-1`}>
           <Text style={tw`text-sm font-semibold text-[${ORANGE_PRIMARY}]`}>
             {item.worker ? 'Ver Detalles' : 'Ver Propuestas'}
           </Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 

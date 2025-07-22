@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   userMessage: {
     alignSelf: 'flex-end',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#f87224ff',
     borderBottomRightRadius: 2,
   },
   botMessage: {
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   serviceTag: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: '#f38e29ff',
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   sendButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#f6953bff',
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   disabledButton: {
-    backgroundColor: '#9ca3af',
+    backgroundColor: '#f6953bff',
   },
 });
 

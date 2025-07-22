@@ -37,7 +37,7 @@ const professionDescriptions: { [key: string]: string } = {
 };
 
 // Función para asignar imagen por género y rotar entre las URLs
-const hombreFotos = [
+export const hombreFotos = [
   'https://images.pexels.com/photos/30257405/pexels-photo-30257405.jpeg',
   'https://images.pexels.com/photos/29284315/pexels-photo-29284315.jpeg',
   'https://images.pexels.com/photos/31610843/pexels-photo-31610843.jpeg',
@@ -45,7 +45,7 @@ const hombreFotos = [
   'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg',
   'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg'
 ];
-const mujerFotos = [
+export const mujerFotos = [
   'https://images.pexels.com/photos/10641053/pexels-photo-10641053.jpeg',
   'https://images.pexels.com/photos/31942700/pexels-photo-31942700.jpeg',
   'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg',

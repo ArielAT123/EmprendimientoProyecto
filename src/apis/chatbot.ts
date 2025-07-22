@@ -4,7 +4,7 @@ type DeepSeekResponse = {
 };
 export const sendMessageToDialogflow = async (message: string): Promise<DeepSeekResponse> => {
   try {
-    const response = await fetch('http://172.19.180.197:3000/api/deepseek/message', {
+    const response = await fetch('http://172.19.185.57:3000/api/deepseek/message', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: message }), // Asegúrate de enviar "text"
