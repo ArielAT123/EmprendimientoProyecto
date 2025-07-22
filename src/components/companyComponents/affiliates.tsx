@@ -1,20 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Linking, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Linking, TouchableOpacity, Image, Alert } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 
 const Afiliates = () => {
   const afiliados = [
     {
-      nombre: 'SMB Senior Account Executive',
-      empresa: 'GitHub',
-      ubicacion: 'India (En remoto)',
+      nombre: 'Electricista certificado',
+      empresa: 'Empresa',
+      ubicacion: 'Guayaquil',
       fecha: 'hace 5 días',
       url: 'https://empresa-x.com/form',
     },
     {
-      nombre: 'Senior Enterprise Account Executive II',
-      empresa: 'GitHub',
-      ubicacion: 'San Francisco, CA (En remoto)',
+      nombre: 'Electronico con maestria',
+      empresa: 'Empresa',
+      ubicacion: 'Guayaquil',
       fecha: 'hace 1 semana',
       url: 'https://empresa-y.com/registro',
     },
@@ -40,7 +40,7 @@ const Afiliates = () => {
           onPress={() => Linking.openURL(item.url)}
         >
           <Image
-            source={{ uri: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png' }}
+            source={{ uri: 'https://cdn-icons-png.flaticon.com/512/10057/10057811.png' }}
             style={styles.avatar}
           />
           <View style={styles.info}>
@@ -52,6 +52,13 @@ const Afiliates = () => {
           <Entypo name="dots-three-vertical" size={18} color="#999" />
         </TouchableOpacity>
       ))}
+
+            <TouchableOpacity
+              style={styles.commentButton}
+              onPress={() => Alert.alert('Nuevo comentario', 'Funcionalidad aún no implementada')}
+            >
+              <Text style={styles.commentButtonText}>Agregar nuevo puesto de trabajo</Text>
+            </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -60,6 +67,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+    commentButton: {
+    backgroundColor: '#0A66C2',
+    padding: 10,
+    marginTop: 15 ,
+    borderRadius: 8,
+    marginBottom: 25,
+  },
+  commentButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   section: {
     padding: 16,

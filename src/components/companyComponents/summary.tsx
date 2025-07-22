@@ -8,7 +8,7 @@ const Summary = () => {
         {/* Resumen */}
         <Text style={styles.sectionTitle}>Resumen</Text>
         <Text style={styles.summary}>
-          As the global home for all developers, GitHub is the complete AI-powered developer platform...
+          Somos una empresa que provee soluciones electricas a clientes que no cuentan con el conocimiento o tiempo para hacerlo.
         </Text>
         <TouchableOpacity>
         <Text style={styles.showMore}>Mostrar todos los detalles →</Text>

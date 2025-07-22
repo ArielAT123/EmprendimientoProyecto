@@ -1,15 +1,17 @@
 // screens/CompanyScreen.js
 import React, { useState } from 'react';
-import {View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Linking} from 'react-native';
+import {View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Linking, TextInput} from 'react-native';
 import Information from '../../components/companyComponents/Information';
 import Publications from '../../components/companyComponents/publications';
 import Affiliates from '../../components/companyComponents/affiliates';
-import summary from '../../components/companyComponents/summary';
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import Summary from '../../components/companyComponents/summary';
+import { useNavigation } from '@react-navigation/native'; 
 
 const CompanyScreen = () => {
 const [selected, setSelected] = useState<'acerca' | 'publicaciones' | 'afiliados' | 'resumen'>('resumen');
+const navigation = useNavigation(); // ← Permite navegar hacia atrás
+const [searchText, setSearchText] = useState('');
 
   const renderComponent = () => {
     switch (selected) {
@@ -26,14 +28,28 @@ const [selected, setSelected] = useState<'acerca' | 'publicaciones' | 'afiliados
 
   return (
     <ScrollView style={styles.container}>
+      
+      {/* Barra de navegación */}
+
       {/* Portada */}
       <View style={styles.header}>
+<View style={styles.topBar}>
+  <TouchableOpacity onPress={() => navigation.goBack()}>
+    <Ionicons name="arrow-back" size={24} color="#000" />
+  </TouchableOpacity>
+  <TextInput
+    style={styles.searchInput}
+    placeholder="Buscar..."
+    value={searchText}
+    onChangeText={setSearchText}
+  />
+</View>
         <Image
-          source={{ uri: 'https://media.licdn.com/dms/image/v2/D563DAQEtlwdonLOvSw/image-scale_191_1128/B56ZbvedScGsAc-/0/1747774461749/github_cover?e=1751266800&v=beta&t=los5c5G3Tu4P_ORamsvPxB_WmMBl_kT4d2K2x6ohBDc' }}
+          source={{ uri: 'https://th.bing.com/th/id/R.5f43e12b606cd289921756a4e015fc2c?rik=9Xl90CA4%2bykp3g&pid=ImgRaw&r=0' }}
           style={styles.cover}
         />
         <Image
-          source={{ uri: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png' }}
+          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/10057/10057811.png' }}
           style={styles.avatar}
         />
       </View>
@@ -41,11 +57,12 @@ const [selected, setSelected] = useState<'acerca' | 'publicaciones' | 'afiliados
       {/* Información principal */}
       <View style={styles.content}>
         <View style={styles.row}>
-          <Text style={styles.name}>GitHub</Text>
+          <Text style={styles.name}>Empresa</Text>
           <Ionicons name="checkmark-circle" size={20} color="#0A66C2" style={{ marginLeft: 5 }} />
         </View>
-        <Text style={styles.description}>The AI-powered developer platform to build, scale, and deliver secure software.</Text>
-        <Text style={styles.meta}>Desarrollo de software • 5 mills. seguidores • 501–1 mil empleados</Text>
+        <Text style={styles.description}>Somos una empresa dedicada a mejorar la vida de los Ecuatorianos</Text>
+        <Text style={styles.meta}>Empresa de solcuciones electricas</Text>
+        <Text style={styles.meta}>150 trabajadores en la empresa</Text>
 
         {/* Botones */}
         <View style={styles.actions}>
@@ -89,6 +106,8 @@ const [selected, setSelected] = useState<'acerca' | 'publicaciones' | 'afiliados
 };
 
 const styles = StyleSheet.create({
+  navigatorBar:{ backgroundColor: 'white', width: 'auto', marginTop:40, marginBottom: 20, display: 'flex', alignContent: 'center', alignItems:'center'},
+  navigationtext: {fontSize: 20, fontWeight: 'bold'},
   container: { flex: 1, backgroundColor: '#fff' },
   header: { position: 'relative' },
   cover: { width: '100%', height: 150 },
@@ -125,7 +144,27 @@ const styles = StyleSheet.create({
   activeTab: { fontWeight: 'bold', borderBottomWidth: 2, borderColor: '#0A66C2', color: '#0A66C2' },
   sectionTitle: { fontWeight: 'bold', marginTop: 20, fontSize: 16 },
   summary: { marginTop: 8, color: '#444', fontSize: 13 },
-  showMore: { marginTop: 10, color: '#0A66C2', fontWeight: '500' }
+  showMore: { marginTop: 10, color: '#0A66C2', fontWeight: '500' },
+  topBar: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingHorizontal: 16,
+  paddingVertical: 10,
+  marginTop: 40,
+  marginBottom: 10,
+  backgroundColor: '#fff',
+},
+searchInput: {
+  flex: 1,
+  marginLeft: 10,
+  backgroundColor: '#f0f0f0',
+  paddingVertical: 6,
+  paddingHorizontal: 12,
+  borderRadius: 20,
+  fontSize: 14,
+},
+
+
 });
 
 export default CompanyScreen;

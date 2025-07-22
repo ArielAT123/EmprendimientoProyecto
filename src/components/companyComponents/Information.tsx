@@ -8,10 +8,13 @@ const Information = () => {
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>¿Qué hace la empresa?</Text>
                 <Text style={styles.sectionText}>
-                    GitHub permite a desarrolladores y empresas colaborar, innovar y crear de forma segura. Con herramientas basadas en IA, pruebas de seguridad integradas e integración perfecta, ayuda a los equipos desde el primer commit hasta el desarrollo empresarial.
+                    Realizamos arreglos de sistemas electricos hasta de aparatos electricos que tenga el cliente
                 </Text>
                 <Text style={styles.sectionText}>
-                    Más del 90% de las empresas de la lista Fortune 100 y más de 150 millones de desarrolladores confían en GitHub para ofrecer soluciones escalables, fiables y seguras a equipos de todos los tamaños.
+                    Nosotros buscamos mejorar la calidad de vida de los Ecuatorianos facilitandoles soluciones a sus problemas electricos al mejor precio
+                </Text>
+                <Text style={styles.sectionText}>
+                    En 2026 buscamos llegar a 200 trabajadores.
                 </Text>
 
                 <TouchableOpacity style={styles.linkButton} onPress={() => Linking.openURL('https://support.github.com/request/landing')}>
