@@ -6,6 +6,14 @@ import { RootStackParamList } from '../../navigation/types';
 import React, { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
+// Orange Color Palette
+const ORANGE_PRIMARY = '#FF6B35';
+const ORANGE_SECONDARY = '#FF8C42';
+const ORANGE_ACCENT = '#FFB347';
+const ORANGE_LIGHTER = '#FFD4B3';
+const ORANGE_DARK = '#FF4500';
+const ORANGE_DARKER = '#E55100';
+
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 type ContactRequest = {
@@ -70,6 +78,10 @@ export default function MyPostsScreen() {
     const [detailsModalVisible, setDetailsModalVisible] = useState(false);
     const [selectedPost, setSelectedPost] = useState<WorkerPost | null>(null);
     const [newPost, setNewPost] = useState({ title: '', description: '', tags: '', imageUrl: '' });
+    
+    // Hover states for better interactions
+    const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+    const [hoveredTag, setHoveredTag] = useState<string | null>(null);
 
     useEffect(() => {
         const loadPosts = async () => {
@@ -156,30 +168,44 @@ export default function MyPostsScreen() {
         }
     };
 
+    const getButtonStyle = (buttonId: string, baseStyle: string, hoverStyle: string) => {
+        return `${baseStyle} ${hoveredButton === buttonId ? hoverStyle : ''}`;
+    };
+
+    const getTagStyle = (tagId: string) => {
+        return hoveredTag === tagId 
+            ? `rounded-full px-3 py-1 mr-2 mb-2 shadow-md transform scale-105`
+            : `rounded-full px-3 py-1 mr-2 mb-2`;
+    };
+
     return (
         <View style={tw`flex-1 bg-gray-50`}>
-            {/* Header */}
-            <View style={tw`bg-white px-5 py-4 rounded-b-lg shadow-sm py-5 mt-10`}>
-                <Text style={tw`text-2xl font-bold text-gray-900`}>Mis Publicaciones</Text>
-                <Text style={tw`text-gray-500 mt-1`}>Administra tus trabajos de electricidad</Text>
+            {/* Header with Orange Gradient */}
+            <View style={[tw`px-5 py-4 rounded-b-lg shadow-lg py-5 mt-10`, { backgroundColor: ORANGE_PRIMARY }]}>
+                <Text style={tw`text-2xl font-bold text-white`}>Mis Publicaciones</Text>
+                <Text style={[tw`mt-1`, { color: ORANGE_LIGHTER }]}>Administra tus trabajos de electricidad</Text>
             </View>
 
-            {/* Search Bar */}
-            <View style={tw`px-5 py-4 bg-white`}>
+            {/* Search Bar with Orange Accent */}
+            <View style={tw`px-5 py-4 bg-white shadow-sm`}>
                 <View style={tw`relative`}>
                     <TextInput
                         placeholder="Buscar por etiqueta, título o descripción..."
                         placeholderTextColor="#9CA3AF"
                         value={searchQuery}
                         onChangeText={setSearchQuery}
-                        style={tw`pl-4 pr-10 py-3 border border-gray-200 rounded-lg text-gray-900 bg-white`}
+                        style={[tw`pl-4 pr-10 py-3 border-2 rounded-lg text-gray-900 bg-white`, 
+                               { borderColor: searchQuery ? ORANGE_ACCENT : '#E5E7EB' }]}
                     />
                     {searchQuery.length > 0 && (
                         <TouchableOpacity
                             style={tw`absolute right-3 top-3`}
                             onPress={() => setSearchQuery('')}
+                            onPressIn={() => setHoveredButton('clear-search')}
+                            onPressOut={() => setHoveredButton(null)}
                         >
-                            <Text style={tw`text-gray-400 text-lg`}>×</Text>
+                            <Text style={[tw`text-lg`, 
+                                        { color: hoveredButton === 'clear-search' ? ORANGE_PRIMARY : '#9CA3AF' }]}>×</Text>
                         </TouchableOpacity>
                     )}
                 </View>
@@ -190,11 +216,11 @@ export default function MyPostsScreen() {
                 {isLoading ? (
                     <View style={tw`mt-6 px-5`}>
                         {[1, 2, 3].map((_, i) => (
-                            <View key={i} style={tw`bg-white rounded-lg p-4 mb-4`}>
+                            <View key={i} style={tw`bg-white rounded-lg p-4 mb-4 shadow-sm`}>
                                 <View style={tw`flex-row`}>
-                                    <View style={tw`w-16 h-16 bg-gray-200 rounded-lg mr-4`} />
+                                    <View style={[tw`w-16 h-16 rounded-lg mr-4`, { backgroundColor: ORANGE_LIGHTER }]} />
                                     <View style={tw`flex-1`}>
-                                        <View style={tw`h-5 bg-gray-200 rounded mb-2 w-3/4`} />
+                                        <View style={[tw`h-5 rounded mb-2 w-3/4`, { backgroundColor: ORANGE_LIGHTER }]} />
                                         <View style={tw`h-4 bg-gray-200 rounded mb-1 w-1/2`} />
                                         <View style={tw`h-4 bg-gray-200 rounded w-2/3`} />
                                     </View>
@@ -203,15 +229,18 @@ export default function MyPostsScreen() {
                         ))}
                     </View>
                 ) : filteredPosts.length === 0 ? (
-                    <View style={tw`mx-5 mt-6 bg-white p-6 rounded-lg items-center`}>
+                    <View style={tw`mx-5 mt-6 bg-white p-6 rounded-lg items-center shadow-sm`}>
                         <Text style={tw`text-gray-500 text-center`}>
                             No se encontraron resultados para "{searchQuery}"
                         </Text>
                         <TouchableOpacity
                             onPress={() => setSearchQuery('')}
-                            style={tw`mt-3 px-4 py-2 bg-blue-50 rounded-lg`}
+                            onPressIn={() => setHoveredButton('clear-all')}
+                            onPressOut={() => setHoveredButton(null)}
+                            style={[tw`mt-3 px-4 py-2 rounded-lg shadow-sm`, 
+                                   { backgroundColor: hoveredButton === 'clear-all' ? ORANGE_ACCENT : ORANGE_LIGHTER }]}
                         >
-                            <Text style={tw`text-blue-600`}>Limpiar búsqueda</Text>
+                            <Text style={[tw`font-medium`, { color: ORANGE_DARKER }]}>Limpiar búsqueda</Text>
                         </TouchableOpacity>
                     </View>
                 ) : (
@@ -219,46 +248,55 @@ export default function MyPostsScreen() {
                         {filteredPosts.map((post, index) => (
                             <View
                                 key={index}
-                                style={tw`bg-white rounded-lg shadow-sm p-4 mb-4 border border-gray-100`}
+                                style={[tw`bg-white rounded-lg shadow-md p-4 mb-4 border-l-4`, 
+                                       { borderLeftColor: ORANGE_PRIMARY }]}
                             >
                                 <View style={tw`mb-3`}>
-                                    <Text style={tw`font-semibold text-gray-900`}>{post.title}</Text>
-                                    <Text style={tw`text-xs text-gray-500`}>ID: {post.postId}</Text>
+                                    <Text style={tw`font-semibold text-gray-900 text-lg`}>{post.title}</Text>
+                                    <Text style={[tw`text-xs`, { color: ORANGE_SECONDARY }]}>ID: {post.postId}</Text>
                                 </View>
 
                                 {post.isImage ? (
                                     <Image
                                         source={{ uri: post.postContent }}
-                                        style={tw`w-full h-48 rounded-lg mb-3`}
+                                        style={tw`w-full h-48 rounded-lg mb-3 shadow-sm`}
                                         resizeMode="cover"
                                     />
                                 ) : (
-                                    <Text style={tw`text-gray-700 mb-3`}>{post.postContent}</Text>
+                                    <View style={[tw`p-4 rounded-lg mb-3`, { backgroundColor: ORANGE_LIGHTER }]}>
+                                        <Text style={tw`text-gray-700`}>{post.postContent}</Text>
+                                    </View>
                                 )}
 
-                                <Text style={tw`text-gray-600 mb-3`}>{post.description}</Text>
+                                <Text style={tw`text-gray-600 mb-3 leading-5`}>{post.description}</Text>
 
-                                {/* Tags */}
+                                {/* Tags with Orange Theme */}
                                 <View style={tw`flex-row flex-wrap mb-4`}>
                                     {post.tags.map((tag, tagIndex) => (
                                         <TouchableOpacity
                                             key={tagIndex}
-                                            style={tw`bg-gray-100 rounded-full px-3 py-1 mr-2 mb-2`}
+                                            style={[tw`${getTagStyle(`${index}-${tagIndex}`)}`, 
+                                                   { backgroundColor: hoveredTag === `${index}-${tagIndex}` ? ORANGE_ACCENT : ORANGE_LIGHTER }]}
                                             onPress={() => setSearchQuery(tag)}
+                                            onPressIn={() => setHoveredTag(`${index}-${tagIndex}`)}
+                                            onPressOut={() => setHoveredTag(null)}
                                         >
-                                            <Text style={tw`text-gray-700 text-xs`}>{tag}</Text>
+                                            <Text style={[tw`text-xs font-medium`, { color: ORANGE_DARKER }]}>{tag}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </View>
 
                                 <TouchableOpacity
-                                    style={tw`py-2 bg-blue-600 rounded-lg items-center justify-center`}
+                                    style={[tw`py-3 rounded-lg items-center justify-center shadow-sm`, 
+                                           { backgroundColor: hoveredButton === `details-${index}` ? ORANGE_SECONDARY : ORANGE_PRIMARY }]}
                                     onPress={() => {
                                         setSelectedPost(post);
                                         setDetailsModalVisible(true);
                                     }}
+                                    onPressIn={() => setHoveredButton(`details-${index}`)}
+                                    onPressOut={() => setHoveredButton(null)}
                                 >
-                                    <Text style={tw`text-white font-medium`}>Ver Detalles</Text>
+                                    <Text style={tw`text-white font-semibold`}>Ver Detalles</Text>
                                 </TouchableOpacity>
                             </View>
                         ))}
@@ -266,15 +304,18 @@ export default function MyPostsScreen() {
                 )}
             </ScrollView>
 
-            {/* FAB for Adding Post */}
+            {/* FAB for Adding Post with Orange Theme */}
             <TouchableOpacity
-                style={tw`absolute bottom-5 right-5 bg-blue-600 rounded-full p-4 shadow-lg`}
+                style={[tw`absolute bottom-5 right-5 rounded-full p-4 shadow-lg`, 
+                       { backgroundColor: hoveredButton === 'fab' ? ORANGE_SECONDARY : ORANGE_PRIMARY }]}
                 onPress={() => setAddModalVisible(true)}
+                onPressIn={() => setHoveredButton('fab')}
+                onPressOut={() => setHoveredButton(null)}
             >
                 <Ionicons name="add" size={24} color="white" />
             </TouchableOpacity>
 
-            {/* Add Post Modal */}
+            {/* Add Post Modal with Orange Theme */}
             <Modal
                 visible={addModalVisible}
                 animationType="slide"
@@ -286,57 +327,73 @@ export default function MyPostsScreen() {
                         source={require('../../../assets/fondopublicaciones.jpg')}
                         style={tw`rounded-t-lg p-5`}
                     >
-
-                        <Text style={tw`text-xl font-bold text-gray-900 mb-4`}>Nueva Publicación</Text>
-                        <TextInput
-                            placeholder="Título (ej. Instalación de Iluminación)"
-                            placeholderTextColor="#9CA3AF"
-                            value={newPost.title}
-                            onChangeText={(text) => setNewPost({ ...newPost, title: text })}
-                            style={tw`pl-4 pr-4 py-3 border border-gray-200 rounded-lg mb-3 text-gray-900 bg-white`}
-                        />
-                        <TextInput
-                            placeholder="Descripción"
-                            placeholderTextColor="#9CA3AF"
-                            value={newPost.description}
-                            onChangeText={(text) => setNewPost({ ...newPost, description: text })}
-                            style={tw`pl-4 pr-4 py-3 border border-gray-200 rounded-lg mb-3 text-gray-900 bg-white h-24`}
-                            multiline
-                        />
-                        <TextInput
-                            placeholder="Etiquetas (separadas por comas, ej. Electricidad, Reparación)"
-                            placeholderTextColor="#9CA3AF"
-                            value={newPost.tags}
-                            onChangeText={(text) => setNewPost({ ...newPost, tags: text })}
-                            style={tw`pl-4 pr-4 py-3 border border-gray-200 rounded-lg mb-3 text-gray-900 bg-white`}
-                        />
-                        <TextInput
-                            placeholder="URL de imagen (opcional)"
-                            placeholderTextColor="#9CA3AF"
-                            value={newPost.imageUrl}
-                            onChangeText={(text) => setNewPost({ ...newPost, imageUrl: text })}
-                            style={tw`pl-4 pr-4 py-3 border border-gray-200 rounded-lg mb-3 text-gray-900 bg-white`}
-                        />
-                        <View style={tw`flex-row justify-around mt-4`}>
-                            <TouchableOpacity
-                                style={tw`py-2 px-4 bg-white rounded-lg`}
-                                onPress={() => setAddModalVisible(false)}
-                            >
-                                <Text style={tw`text-blue-700`}>Cancelar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={tw`py-2 px-4 bg-orange-400 rounded-lg`}
-                                onPress={addNewPost}
-                            >
-                                <Text style={tw`text-white`}>Publicar</Text>
-                            </TouchableOpacity>
+                        <View style={[tw`rounded-t-lg p-5`, { backgroundColor: 'rgba(255, 255, 255, 0.95)' }]}>
+                            <Text style={[tw`text-xl font-bold mb-4`, { color: ORANGE_DARKER }]}>Nueva Publicación</Text>
+                            
+                            <TextInput
+                                placeholder="Título (ej. Instalación de Iluminación)"
+                                placeholderTextColor="#9CA3AF"
+                                value={newPost.title}
+                                onChangeText={(text) => setNewPost({ ...newPost, title: text })}
+                                style={[tw`pl-4 pr-4 py-3 border-2 rounded-lg mb-3 text-gray-900 bg-white`, 
+                                       { borderColor: ORANGE_LIGHTER }]}
+                            />
+                            
+                            <TextInput
+                                placeholder="Descripción"
+                                placeholderTextColor="#9CA3AF"
+                                value={newPost.description}
+                                onChangeText={(text) => setNewPost({ ...newPost, description: text })}
+                                style={[tw`pl-4 pr-4 py-3 border-2 rounded-lg mb-3 text-gray-900 bg-white h-24`, 
+                                       { borderColor: ORANGE_LIGHTER }]}
+                                multiline
+                            />
+                            
+                            <TextInput
+                                placeholder="Etiquetas (separadas por comas, ej. Electricidad, Reparación)"
+                                placeholderTextColor="#9CA3AF"
+                                value={newPost.tags}
+                                onChangeText={(text) => setNewPost({ ...newPost, tags: text })}
+                                style={[tw`pl-4 pr-4 py-3 border-2 rounded-lg mb-3 text-gray-900 bg-white`, 
+                                       { borderColor: ORANGE_LIGHTER }]}
+                            />
+                            
+                            <TextInput
+                                placeholder="URL de imagen (opcional)"
+                                placeholderTextColor="#9CA3AF"
+                                value={newPost.imageUrl}
+                                onChangeText={(text) => setNewPost({ ...newPost, imageUrl: text })}
+                                style={[tw`pl-4 pr-4 py-3 border-2 rounded-lg mb-3 text-gray-900 bg-white`, 
+                                       { borderColor: ORANGE_LIGHTER }]}
+                            />
+                            
+                            <View style={tw`flex-row justify-around mt-4`}>
+                                <TouchableOpacity
+                                    style={[tw`py-3 px-6 rounded-lg shadow-sm`, 
+                                           { backgroundColor: hoveredButton === 'cancel' ? '#F3F4F6' : 'white' }]}
+                                    onPress={() => setAddModalVisible(false)}
+                                    onPressIn={() => setHoveredButton('cancel')}
+                                    onPressOut={() => setHoveredButton(null)}
+                                >
+                                    <Text style={[tw`font-medium`, { color: ORANGE_PRIMARY }]}>Cancelar</Text>
+                                </TouchableOpacity>
+                                
+                                <TouchableOpacity
+                                    style={[tw`py-3 px-6 rounded-lg shadow-sm`, 
+                                           { backgroundColor: hoveredButton === 'publish' ? ORANGE_SECONDARY : ORANGE_PRIMARY }]}
+                                    onPress={addNewPost}
+                                    onPressIn={() => setHoveredButton('publish')}
+                                    onPressOut={() => setHoveredButton(null)}
+                                >
+                                    <Text style={tw`text-white font-semibold`}>Publicar</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </ImageBackground>
-
                 </View>
             </Modal>
 
-            {/* Post Details Modal */}
+            {/* Post Details Modal with Orange Theme */}
             <Modal
                 visible={detailsModalVisible}
                 animationType="slide"
@@ -345,68 +402,93 @@ export default function MyPostsScreen() {
             >
                 <View style={tw`flex-1 bg-black bg-opacity-50 justify-end`}>
                     <View style={tw`bg-white rounded-t-lg p-5 max-h-3/4`}>
-                        <ScrollView>
+                        <ScrollView showsVerticalScrollIndicator={false}>
                             {selectedPost && (
                                 <>
-                                    <Text style={tw`text-xl font-bold text-gray-900 mb-2`}>{selectedPost.title}</Text>
-                                    <Text style={tw`text-xs text-gray-500 mb-3`}>ID: {selectedPost.postId}</Text>
+                                    <View style={[tw`border-l-4 pl-4 mb-4`, { borderLeftColor: ORANGE_PRIMARY }]}>
+                                        <Text style={tw`text-xl font-bold text-gray-900`}>{selectedPost.title}</Text>
+                                        <Text style={[tw`text-xs mt-1`, { color: ORANGE_SECONDARY }]}>ID: {selectedPost.postId}</Text>
+                                    </View>
+                                    
                                     {selectedPost.isImage ? (
                                         <Image
                                             source={{ uri: selectedPost.postContent }}
-                                            style={tw`w-full h-48 rounded-lg mb-3`}
+                                            style={tw`w-full h-48 rounded-lg mb-3 shadow-sm`}
                                             resizeMode="cover"
                                         />
                                     ) : (
-                                        <Text style={tw`text-gray-700 mb-3`}>{selectedPost.postContent}</Text>
+                                        <View style={[tw`p-4 rounded-lg mb-3`, { backgroundColor: ORANGE_LIGHTER }]}>
+                                            <Text style={tw`text-gray-700`}>{selectedPost.postContent}</Text>
+                                        </View>
                                     )}
-                                    <Text style={tw`text-gray-600 mb-3`}>{selectedPost.description}</Text>
+                                    
+                                    <Text style={tw`text-gray-600 mb-3 leading-5`}>{selectedPost.description}</Text>
+                                    
                                     <View style={tw`flex-row flex-wrap mb-4`}>
                                         {selectedPost.tags.map((tag, tagIndex) => (
                                             <TouchableOpacity
                                                 key={tagIndex}
-                                                style={tw`bg-gray-100 rounded-full px-3 py-1 mr-2 mb-2`}
+                                                style={[tw`${getTagStyle(`modal-${tagIndex}`)}`, 
+                                                       { backgroundColor: hoveredTag === `modal-${tagIndex}` ? ORANGE_ACCENT : ORANGE_LIGHTER }]}
                                                 onPress={() => {
                                                     setSearchQuery(tag);
                                                     setDetailsModalVisible(false);
                                                 }}
+                                                onPressIn={() => setHoveredTag(`modal-${tagIndex}`)}
+                                                onPressOut={() => setHoveredTag(null)}
                                             >
-                                                <Text style={tw`text-gray-700 text-xs`}>{tag}</Text>
+                                                <Text style={[tw`text-xs font-medium`, { color: ORANGE_DARKER }]}>{tag}</Text>
                                             </TouchableOpacity>
                                         ))}
                                     </View>
-                                    <Text style={tw`text-lg font-semibold text-gray-900 mb-2`}>Solicitudes de Contacto</Text>
+                                    
+                                    <Text style={[tw`text-lg font-semibold mb-3`, { color: ORANGE_DARKER }]}>
+                                        Solicitudes de Contacto
+                                    </Text>
+                                    
                                     {selectedPost.contactRequests.length === 0 ? (
-                                        <Text style={tw`text-gray-500 text-center`}>No hay solicitudes de contacto.</Text>
+                                        <View style={[tw`p-4 rounded-lg`, { backgroundColor: ORANGE_LIGHTER }]}>
+                                            <Text style={tw`text-gray-500 text-center`}>No hay solicitudes de contacto.</Text>
+                                        </View>
                                     ) : (
                                         selectedPost.contactRequests.map((request, index) => (
                                             <View
                                                 key={index}
-                                                style={tw`flex-row items-center justify-between bg-gray-50 rounded-lg p-3 mb-2`}
+                                                style={tw`flex-row items-center justify-between bg-gray-50 rounded-lg p-3 mb-2 shadow-sm`}
                                             >
                                                 <View>
-                                                    <Text style={tw`text-gray-900`}>{request.clientName}</Text>
-                                                    <Text style={tw`text-xs text-gray-500`}>ID: {request.clientId}</Text>
+                                                    <Text style={tw`text-gray-900 font-medium`}>{request.clientName}</Text>
+                                                    <Text style={[tw`text-xs`, { color: ORANGE_SECONDARY }]}>ID: {request.clientId}</Text>
                                                 </View>
                                                 {request.status === 'pending' ? (
                                                     <TouchableOpacity
-                                                        style={tw`py-1 px-3 bg-blue-600 rounded-lg`}
+                                                        style={[tw`py-2 px-4 rounded-lg shadow-sm`, 
+                                                               { backgroundColor: hoveredButton === `accept-${index}` ? ORANGE_SECONDARY : ORANGE_PRIMARY }]}
                                                         onPress={() => acceptContactRequest(selectedPost.postId, request.clientId)}
+                                                        onPressIn={() => setHoveredButton(`accept-${index}`)}
+                                                        onPressOut={() => setHoveredButton(null)}
                                                     >
-                                                        <Text style={tw`text-white text-sm`}>Aceptar</Text>
+                                                        <Text style={tw`text-white text-sm font-medium`}>Aceptar</Text>
                                                     </TouchableOpacity>
                                                 ) : (
-                                                    <Text style={tw`text-green-600 text-sm`}>Aceptado</Text>
+                                                    <View style={[tw`py-2 px-4 rounded-lg`, { backgroundColor: '#10B981' }]}>
+                                                        <Text style={tw`text-white text-sm font-medium`}>Aceptado ✓</Text>
+                                                    </View>
                                                 )}
                                             </View>
                                         ))
                                     )}
                                 </>
                             )}
+                            
                             <TouchableOpacity
-                                style={tw`mt-4 py-2 bg-gray-200 rounded-lg items-center`}
+                                style={[tw`mt-4 py-3 rounded-lg items-center shadow-sm`, 
+                                       { backgroundColor: hoveredButton === 'close-modal' ? '#F3F4F6' : '#E5E7EB' }]}
                                 onPress={() => setDetailsModalVisible(false)}
+                                onPressIn={() => setHoveredButton('close-modal')}
+                                onPressOut={() => setHoveredButton(null)}
                             >
-                                <Text style={tw`text-gray-700`}>Cerrar</Text>
+                                <Text style={tw`text-gray-700 font-medium`}>Cerrar</Text>
                             </TouchableOpacity>
                         </ScrollView>
                     </View>

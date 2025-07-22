@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { sendMessageToDialogflow } from '../apis/chatbot';
 
 const { width } = Dimensions.get('window');
+const pastelOrangeDark = '#FF8C42'; // Naranja pastel más oscuro
 
 type Message = {
   id: string;
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 30,
     right: 20,
-    backgroundColor: '#3b82f6',
+    backgroundColor: pastelOrangeDark,
     width: 56,
     height: 56,
     borderRadius: 28,

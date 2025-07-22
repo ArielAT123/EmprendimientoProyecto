@@ -11,22 +11,22 @@ export const HeaderHome = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     return (
-        <View style={tw`flex-row justify-between items-center px-6 mt-5 py-4 bg-white shadow-sm border-b border-gray-100`}>
-            <View style={tw`flex-row items-center`}>
+        <View style={tw`flex-row justify-between items-center px-6 py-4 bg-white shadow-sm border-b border-gray-100`}>
+            <View style={tw`mt-5 flex-row items-center px-4 py-2 rounded-full`}>
                 <Image
-                    source={require('../../assets/jobby.png')}
+                    source={require('../../assets/jobby.jpg')}
                     style={tw`w-15 h-15`}
                     resizeMode="contain"
                 />
-                <Text style={tw`text-2xl font-bold text-blue-600 ml-2`}>JOBBY</Text>
+                <Text style={tw`text-2xl font-bold text-orange-500 ml-2`}>JOBBY</Text>
             </View>
 
             <TouchableOpacity
-                style={tw`bg-blue-600 px-5 py-2 rounded-full flex-row items-center`}
+                style={tw`bg-orange-500 px-5 mt-5 py-2 rounded-full flex-row items-center`}
                 onPress={() => navigation.navigate('Register')}
             >
-                <MaterialCommunityIcons name="account-plus" size={18} color="white" />
-                <Text style={tw`text-white font-medium ml-2`}>Registro</Text>
+                <MaterialCommunityIcons name="account-plus" size={18} color="black" />
+                <Text style={tw`text-black font-medium ml-2`}>Registro</Text>
             </TouchableOpacity>
         </View>
     )
