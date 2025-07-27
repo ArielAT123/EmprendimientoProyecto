@@ -7,6 +7,7 @@ export type RootStackParamList = {
   HomeTrabajador: undefined;
   TrabajadorTabs: undefined; // Navegación para trabajadores
   CompanyScreen: undefined; // Pantalla de empresa
+  hireScreen: undefined; // Pantalla de contratación
   // Agrega aquí otras pantallas si es necesario
 };
 export type HomeStackParamList = {

@@ -11,15 +11,15 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import tw from 'twrnc';
-import { mockJobs, ORANGE_PRIMARY, ORANGE_DARK, ORANGE_LIGHTER, ORANGE_ACCENT } from './Datos/datos';
-
-// Agrega este mock arriba o en tu archivo de datos si prefieres
-const mockProposals = [
-  { id: 1, name: 'Carlos Ruiz', price: 20, message: 'Puedo hacerlo hoy mismo.' },
-  { id: 2, name: 'Andrea Molina', price: 22, message: 'Tengo experiencia en este tipo de trabajos.' },
-  { id: 3, name: 'Pedro Sánchez', price: 18, message: 'Trabajo rápido y garantizado.' },
-  { id: 4, name: 'Lucía Torres', price: 25, message: 'Llevo mis propias herramientas.' },
-];
+import { 
+  mockJobs, 
+  mockProposals, 
+  mockJobImages, 
+  ORANGE_PRIMARY, 
+  ORANGE_DARK, 
+  ORANGE_LIGHTER, 
+  ORANGE_ACCENT 
+} from './Datos/datos';
 
 const ClienteJobsScreen = ({ navigation }: any) => {
   const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active');
@@ -29,10 +29,10 @@ const ClienteJobsScreen = ({ navigation }: any) => {
   const [proposals, setProposals] = useState<any[]>([]);
 
   const categories = [
-    { label: 'Todos', value: 'todos' },
-    { label: 'Completados', value: 'completed' },
+    { label: 'Todas', value: 'todos' },
     { label: 'En Progreso', value: 'in_progress' },
-    { label: 'Esperando', value: 'waiting' },
+    { label: 'Pendientes', value: 'waiting' },
+    { label: 'Completadas', value: 'completed' },
   ];
 
   const [selectedCategory, setSelectedCategory] = useState('todos');
@@ -60,6 +60,11 @@ const ClienteJobsScreen = ({ navigation }: any) => {
     setModalVisible(true);
   };
 
+  const handleJobPress = (job: any) => {
+    setSelectedJob(job);
+    setModalVisible(true);
+  };
+
   const handleViewProposals = (job: any) => {
     // Genera propuestas random para mostrar
     const randomProposals = Array.from({ length: job.proposalsCount }).map((_, i) => {
@@ -70,11 +75,29 @@ const ClienteJobsScreen = ({ navigation }: any) => {
     setProposalsModal(true);
   };
 
+  const getJobImages = (job: any) => {
+    // Solo mostrar imágenes para trabajos completados o en progreso
+    if (job.status === 'completed' || job.status === 'in_progress') {
+      // Generar entre 2-4 imágenes aleatorias
+      const imageCount = Math.floor(Math.random() * 3) + 2;
+      const selectedImages = [];
+      for (let i = 0; i < imageCount; i++) {
+        const randomImage = mockJobImages[Math.floor(Math.random() * mockJobImages.length)];
+        selectedImages.push(randomImage);
+      }
+      return selectedImages;
+    }
+    return [];
+  };
+
   const renderJobCard = ({ item }: { item: any }) => (
-    <View style={[
-      tw`bg-white rounded-xl p-4 mb-3`,
-      { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }
-    ]}>
+    <TouchableOpacity
+      style={[
+        tw`bg-white rounded-xl p-4 mb-3`,
+        { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }
+      ]}
+      onPress={() => handleJobPress(item)}
+    >
       {/* Título y estado */}
       <View style={tw`flex-row justify-between items-start mb-1`}>
         <View style={tw`flex-1 pr-2`}>
@@ -98,8 +121,8 @@ const ClienteJobsScreen = ({ navigation }: any) => {
         </Text>
         <Text style={tw`text-base font-bold text-[${ORANGE_DARK}]`}>${item.budget}</Text>
       </View>
-      {/* Trabajador o propuestas y botón */}
-      <TouchableOpacity style={tw`flex-row justify-between items-center`}>
+      {/* Trabajador o propuestas */}
+      <View style={tw`flex-row justify-between items-center`}>
         {item.worker ? (
           <View style={tw`flex-row items-center flex-1`}>
             <Image
@@ -115,18 +138,12 @@ const ClienteJobsScreen = ({ navigation }: any) => {
             </View>
           </View>
         ) : (
-          <Text style={tw`text-sm text-gray-500 flex-1`}>
+          <Text style={tw`text-sm text-gray-500`}>
             {item.proposalsCount} propuestas recibidas
           </Text>
         )}
-        <View
-          style={tw`px-3 py-1`}>
-          <Text style={tw`text-sm font-semibold text-[${ORANGE_PRIMARY}]`}>
-            {item.worker ? 'Ver Detalles' : 'Ver Propuestas'}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 
   const activeJobs = mockJobs.filter(job => job.status !== 'completed');
@@ -162,7 +179,7 @@ const ClienteJobsScreen = ({ navigation }: any) => {
         <View style={tw`flex-row justify-between items-center`}>
           <View />
           <Text style={{ color: ORANGE_DARK, fontSize: 24, fontWeight: 'bold' }}>
-            Mis Trabajos
+            Mis Solicitudes
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate('CreateJob')}>
             <Icon name="add" size={28} color={ORANGE_DARK} />
@@ -238,8 +255,16 @@ const ClienteJobsScreen = ({ navigation }: any) => {
         transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={tw`flex-1 bg-black bg-opacity-40 justify-end`}>
-          <View style={tw`bg-white rounded-t-2xl p-6 max-h-[80%]`}>
+        <TouchableOpacity 
+          style={tw`flex-1 bg-black bg-opacity-40 justify-end`}
+          activeOpacity={1}
+          onPress={() => setModalVisible(false)}
+        >
+          <TouchableOpacity 
+            style={tw`bg-white rounded-t-2xl p-6 max-h-[80%]`}
+            activeOpacity={1}
+            onPress={(e) => e.stopPropagation()}
+          >
             <ScrollView>
               {selectedJob && (
                 <>
@@ -249,30 +274,77 @@ const ClienteJobsScreen = ({ navigation }: any) => {
                   <Text style={tw`text-sm text-gray-500 mb-1`}>Dirección: {selectedJob.address}</Text>
                   <Text style={tw`text-sm text-gray-500 mb-1`}>Fecha: {selectedJob.date}</Text>
                   <Text style={tw`text-sm text-gray-500 mb-1`}>Presupuesto: ${selectedJob.budget}</Text>
+                  
+                  <View style={[tw`p-3 rounded-xl mb-3`, { backgroundColor: getStatusColor(selectedJob.status) + '20' }]}>
+                    <Text style={[tw`font-semibold`, { color: getStatusColor(selectedJob.status) }]}>
+                      Estado: {getStatusText(selectedJob.status)}
+                    </Text>
+                  </View>
+
                   {selectedJob.worker && (
-                    <View style={tw`flex-row items-center mt-2`}>
+                    <View style={tw`flex-row items-center mt-2 p-3 bg-gray-50 rounded-xl`}>
                       <Image
                         source={{ uri: selectedJob.worker.photo }}
-                        style={tw`w-10 h-10 rounded-full mr-2 bg-gray-200`}
+                        style={tw`w-12 h-12 rounded-full mr-3 bg-gray-200`}
                         resizeMode="cover"
                       />
                       <View>
                         <Text style={tw`text-base font-bold text-black`}>{selectedJob.worker.name}</Text>
-                        <Text style={tw`text-xs text-black`}>{selectedJob.worker.profession}</Text>
+                        <Text style={tw`text-sm text-gray-600`}>{selectedJob.worker.profession}</Text>
                       </View>
                     </View>
+                  )}
+
+                  {/* Imágenes del trabajo (solo para completados o en progreso) */}
+                  {(selectedJob.status === 'completed' || selectedJob.status === 'in_progress') && (
+                    <View style={tw`mt-4`}>
+                      <Text style={tw`text-lg font-bold text-[${ORANGE_DARK}] mb-3`}>
+                        {selectedJob.status === 'completed' ? 'Trabajo Realizado' : 'Progreso del Trabajo'}
+                      </Text>
+                      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {getJobImages(selectedJob).map((image, index) => (
+                          <View key={index} style={tw`mr-3`}>
+                            <Image
+                              source={{ uri: image }}
+                              style={tw`w-24 h-24 rounded-xl`}
+                              resizeMode="cover"
+                            />
+                          </View>
+                        ))}
+                      </ScrollView>
+                      <Text style={tw`text-xs text-gray-500 mt-2`}>
+                        {selectedJob.status === 'completed' 
+                          ? 'Fotos del trabajo completado enviadas por el trabajador'
+                          : 'Fotos del progreso actual del trabajo'
+                        }
+                      </Text>
+                    </View>
+                  )}
+
+                  {selectedJob.status === 'waiting' && selectedJob.proposalsCount > 0 && !selectedJob.worker && (
+                    <TouchableOpacity
+                      style={tw`mt-4 bg-[${ORANGE_PRIMARY}] py-3 rounded-xl`}
+                      onPress={() => {
+                        setModalVisible(false);
+                        handleViewProposals(selectedJob);
+                      }}
+                    >
+                      <Text style={tw`text-white text-center font-bold text-base`}>
+                        Ver {selectedJob.proposalsCount} Propuesta{selectedJob.proposalsCount > 1 ? 's' : ''}
+                      </Text>
+                    </TouchableOpacity>
                   )}
                 </>
               )}
               <TouchableOpacity
-                style={tw`mt-6 bg-[${ORANGE_PRIMARY}] py-3 rounded-xl`}
+                style={tw`mt-6 bg-gray-500 py-3 rounded-xl`}
                 onPress={() => setModalVisible(false)}
               >
                 <Text style={tw`text-white text-center font-bold text-base`}>Cerrar</Text>
               </TouchableOpacity>
             </ScrollView>
-          </View>
-        </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
       </Modal>
 
       {/* Modal de propuestas */}
@@ -282,8 +354,16 @@ const ClienteJobsScreen = ({ navigation }: any) => {
         transparent
         onRequestClose={() => setProposalsModal(false)}
       >
-        <View style={tw`flex-1 bg-black bg-opacity-40 justify-end`}>
-          <View style={tw`bg-white rounded-t-2xl p-6 max-h-[80%]`}>
+        <TouchableOpacity 
+          style={tw`flex-1 bg-black bg-opacity-40 justify-end`}
+          activeOpacity={1}
+          onPress={() => setProposalsModal(false)}
+        >
+          <TouchableOpacity 
+            style={tw`bg-white rounded-t-2xl p-6 max-h-[80%]`}
+            activeOpacity={1}
+            onPress={(e) => e.stopPropagation()}
+          >
             <Text style={tw`text-xl font-bold text-[${ORANGE_DARK}] mb-4`}>Propuestas</Text>
             <ScrollView>
               {proposals.length === 0 ? (
@@ -314,8 +394,8 @@ const ClienteJobsScreen = ({ navigation }: any) => {
                 <Text style={tw`text-white text-center font-bold text-base`}>Cerrar</Text>
               </TouchableOpacity>
             </ScrollView>
-          </View>
-        </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
       </Modal>
     </SafeAreaView>
   );

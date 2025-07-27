@@ -15,7 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
 import { ORANGE_PRIMARY, ORANGE_DARK, ORANGE_LIGHTER } from './Datos/datos';
 
-const CreateJobScreen = ({ navigation }: any) => {
+const HireScreen = ({ navigation, route }: any) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [budget, setBudget] = useState('');
@@ -23,6 +23,21 @@ const CreateJobScreen = ({ navigation }: any) => {
   const [deviceModel, setDeviceModel] = useState('');
   const [problemImage, setProblemImage] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+
+  // Obtener parámetros de la navegación
+  const selectedWorker = route?.params?.selectedWorker;
+  const preselectedCategory = route?.params?.preselectedCategory;
+
+  // Auto-preseleccionar categoría si viene desde contratar trabajador
+  React.useEffect(() => {
+    if (preselectedCategory) {
+      setSelectedCategory(preselectedCategory);
+    }
+    if (selectedWorker) {
+      // Opcional: prellenar el título con ejemplo específico
+      setTitle('Aire acondicionado dañado');
+    }
+  }, [preselectedCategory, selectedWorker]);
 
   const categories = [
     { id: 'tecnicos', name: 'Técnicos', icon: 'build' },
@@ -92,8 +107,8 @@ const CreateJobScreen = ({ navigation }: any) => {
   const handleSendJob = () => {
     setShowPreview(false);
     Alert.alert(
-      'Trabajo Creado',
-      'Tu trabajo ha sido publicado exitosamente. Los trabajadores comenzarán a enviar propuestas.',
+      'Solicitud Enviada',
+      'Tu solicitud de contratación ha sido enviada al trabajador exitosamente. Te notificaremos cuando responda.',
       [
         {
           text: 'Ver Mis Solicitudes',
@@ -130,7 +145,7 @@ const CreateJobScreen = ({ navigation }: any) => {
             <MaterialIcons name="arrow-back" size={24} color={ORANGE_DARK} />
           </TouchableOpacity>
           <Text style={{ color: ORANGE_DARK, fontSize: 24, fontWeight: 'bold' }}>
-            Crear Nuevo Trabajo
+            Solicitud de contratación
           </Text>
           <View />
         </View>
@@ -138,7 +153,7 @@ const CreateJobScreen = ({ navigation }: any) => {
 
       <ScrollView style={tw`flex-1 p-4`}>
         <View style={tw`mb-6`}>
-          <Text style={tw`text-[${ORANGE_DARK}] text-base font-bold mb-2`}>Título del Trabajo</Text>
+          <Text style={tw`text-[${ORANGE_DARK}] text-base font-bold mb-2`}>Título de la Solicitud</Text>
           <TextInput
             style={[
               tw`bg-white rounded-lg p-3 text-base`,
@@ -153,11 +168,11 @@ const CreateJobScreen = ({ navigation }: any) => {
                 elevation: 2,
               },
             ]}
-            placeholder="Ej: Reparación de aire acondicionado"
+            placeholder="Ej: Aire acondicionado dañado"
             value={title}
             onChangeText={setTitle}
             onFocus={() => {
-              if (title === 'Reparación de aire acondicionado') {
+              if (title === 'Aire acondicionado dañado') {
                 setTitle('');
               }
             }}
@@ -311,7 +326,7 @@ const CreateJobScreen = ({ navigation }: any) => {
         <TouchableOpacity 
           style={tw`bg-[${ORANGE_PRIMARY}] p-4 rounded-lg items-center mt-6 mb-8`} 
           onPress={handleCreateJob}>
-          <Text style={tw`text-white text-lg font-bold`}>Publicar Trabajo</Text>
+          <Text style={tw`text-white text-lg font-bold`}>Enviar Solicitud</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -351,7 +366,7 @@ const CreateJobScreen = ({ navigation }: any) => {
                 style={tw`mt-6 bg-[${ORANGE_PRIMARY}] py-3 rounded-xl`}
                 onPress={handleSendJob}
               >
-                <Text style={tw`text-white text-center font-bold text-base`}>Aceptar y Enviar</Text>
+                <Text style={tw`text-white text-center font-bold text-base`}>Enviar Solicitud</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={tw`mt-2 bg-gray-200 py-3 rounded-xl`}
@@ -367,4 +382,4 @@ const CreateJobScreen = ({ navigation }: any) => {
   );
 };
 
-export default CreateJobScreen;
+export default HireScreen;

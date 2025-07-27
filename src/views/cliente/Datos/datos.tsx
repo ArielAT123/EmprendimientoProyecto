@@ -54,6 +54,23 @@ export const mujerFotos = [
   'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg'
 ];
 
+// Fotos de portafolio de trabajos realizados
+export const portfolioPhotos = [
+  // Fotos de trabajos de aire acondicionado, electricidad, construcción
+  'https://images.pexels.com/photos/162539/architecture-building-joy-business-162539.jpeg',
+  'https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg',
+  'https://images.pexels.com/photos/834892/pexels-photo-834892.jpeg',
+  'https://images.pexels.com/photos/159045/the-interior-of-the-repair-interior-design-159045.jpeg',
+  'https://images.pexels.com/photos/271816/pexels-photo-271816.jpeg',
+  'https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg',
+  'https://images.pexels.com/photos/221024/pexels-photo-221024.jpeg',
+  'https://images.pexels.com/photos/280232/pexels-photo-280232.jpeg',
+  'https://images.pexels.com/photos/2251247/pexels-photo-2251247.jpeg',
+  'https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg',
+  'https://images.pexels.com/photos/1112059/pexels-photo-1112059.jpeg',
+  'https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg'
+];
+
 // 10 verificados (5 originales + 5 nuevos)
 const verifiedWorkers = [
   {
@@ -68,6 +85,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Técnico de Aire Acondicionado'],
     photo: hombreFotos[0],
+    experience: '8 años de experiencia',
+    certifications: ['Certificado HVAC', 'Refrigeración Industrial', 'Seguridad Eléctrica'],
+    skills: ['Instalación de sistemas centrales', 'Reparación de compresores', 'Mantenimiento preventivo', 'Diagnóstico avanzado'],
+    portfolioPhotos: [portfolioPhotos[0], portfolioPhotos[1], portfolioPhotos[2]],
+    phone: '+593 99 123 4567',
+    email: 'miguel.perez@email.com',
+    frequentJobs: [
+      { name: 'Limpieza de aires acondicionados', price: 15 },
+      { name: 'Instalación de aire split', price: 45 },
+      { name: 'Recarga de gas refrigerante', price: 25 },
+      { name: 'Mantenimiento preventivo', price: 20 }
+    ]
   },
   {
     id: 2,
@@ -81,6 +110,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Maestro de Construcción'],
     photo: hombreFotos[1],
+    experience: '12 años de experiencia',
+    certifications: ['Licencia de Construcción', 'Seguridad Industrial', 'Gestión de Proyectos'],
+    skills: ['Dirección de obra', 'Albañilería', 'Estructuras de hormigón', 'Acabados de construcción'],
+    portfolioPhotos: [portfolioPhotos[3], portfolioPhotos[4], portfolioPhotos[5]],
+    phone: '+593 98 765 4321',
+    email: 'carlos.rodriguez@email.com',
+    frequentJobs: [
+      { name: 'Reparación de paredes y techos', price: 30 },
+      { name: 'Instalación de cerámica', price: 25 },
+      { name: 'Construcción de losas', price: 80 },
+      { name: 'Remodelación de baños', price: 120 }
+    ]
   },
   {
     id: 3,
@@ -94,6 +135,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Técnico en Computación'],
     photo: mujerFotos[0],
+    experience: '6 años de experiencia',
+    certifications: ['CompTIA A+', 'Microsoft Certified', 'Reparación de Laptops'],
+    skills: ['Reparación de hardware', 'Instalación de software', 'Redes domésticas', 'Recuperación de datos'],
+    portfolioPhotos: [portfolioPhotos[6], portfolioPhotos[7], portfolioPhotos[8]],
+    phone: '+593 96 888 7777',
+    email: 'ana.lopez@email.com',
+    frequentJobs: [
+      { name: 'Instalación de programas', price: 12 },
+      { name: 'Limpieza de virus', price: 15 },
+      { name: 'Configuración de redes WiFi', price: 18 },
+      { name: 'Reparación de pantallas', price: 35 }
+    ]
   },
   {
     id: 4,
@@ -107,6 +160,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Plomera'],
     photo: mujerFotos[1],
+    experience: '5 años de experiencia',
+    certifications: ['Plomería Residencial', 'Instalaciones Sanitarias', 'Detección de Fugas'],
+    skills: ['Soldadura de tuberías', 'Instalación de grifería', 'Sistemas de calentadores', 'Destape de desagües'],
+    portfolioPhotos: [portfolioPhotos[9], portfolioPhotos[10], portfolioPhotos[11]],
+    phone: '+593 95 555 3333',
+    email: 'sofia.herrera@email.com',
+    frequentJobs: [
+      { name: 'Cambio de grifería', price: 18 },
+      { name: 'Destape de tuberías', price: 15 },
+      { name: 'Instalación de calentadores', price: 35 },
+      { name: 'Reparación de fugas', price: 22 }
+    ]
   },
   {
     id: 5,
@@ -120,6 +185,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Electricista'],
     photo: hombreFotos[2],
+    experience: '10 años de experiencia',
+    certifications: ['Electricista Autorizado', 'Seguridad Eléctrica', 'Instalaciones Industriales'],
+    skills: ['Cableado residencial', 'Tableros eléctricos', 'Instalación de luminarias', 'Sistemas trifásicos'],
+    portfolioPhotos: [portfolioPhotos[0], portfolioPhotos[3], portfolioPhotos[6]],
+    phone: '+593 97 444 2222',
+    email: 'luis.gomez@email.com',
+    frequentJobs: [
+      { name: 'Instalación de tomacorrientes', price: 12 },
+      { name: 'Arreglo de cortocircuitos', price: 20 },
+      { name: 'Instalación de luminarias', price: 25 },
+      { name: 'Cambio de tableros eléctricos', price: 85 }
+    ]
   },
   {
     id: 6,
@@ -133,6 +210,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Carpintera'],
     photo: mujerFotos[2],
+    experience: '7 años de experiencia',
+    certifications: ['Carpintería Artesanal', 'Diseño de Muebles', 'Restauración de Madera'],
+    skills: ['Muebles a medida', 'Restauración', 'Diseño de interiores', 'Trabajos en MDF'],
+    portfolioPhotos: [portfolioPhotos[1], portfolioPhotos[4], portfolioPhotos[7]],
+    phone: '+593 94 666 8888',
+    email: 'patricia.salazar@email.com',
+    frequentJobs: [
+      { name: 'Fabricación de muebles a medida', price: 45 },
+      { name: 'Reparación de puertas', price: 20 },
+      { name: 'Instalación de closets', price: 65 },
+      { name: 'Restauración de muebles', price: 35 }
+    ]
   },
   {
     id: 7,
@@ -146,6 +235,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Jardinero'],
     photo: hombreFotos[3],
+    experience: '4 años de experiencia',
+    certifications: ['Paisajismo', 'Manejo de Plagas', 'Riego Tecnificado'],
+    skills: ['Diseño de jardines', 'Poda especializada', 'Sistemas de riego', 'Control de plagas'],
+    portfolioPhotos: [portfolioPhotos[2], portfolioPhotos[5], portfolioPhotos[8]],
+    phone: '+593 93 777 9999',
+    email: 'jorge.zambrano@email.com',
+    frequentJobs: [
+      { name: 'Corte de césped', price: 15 },
+      { name: 'Poda de árboles', price: 25 },
+      { name: 'Diseño de jardines', price: 40 },
+      { name: 'Fumigación de plantas', price: 18 }
+    ]
   },
   {
     id: 8,
@@ -159,6 +260,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Pintora'],
     photo: mujerFotos[3],
+    experience: '6 años de experiencia',
+    certifications: ['Técnicas de Pintura', 'Acabados Decorativos', 'Pintura Industrial'],
+    skills: ['Pintura texturizada', 'Murales artísticos', 'Acabados especiales', 'Restauración de fachadas'],
+    portfolioPhotos: [portfolioPhotos[9], portfolioPhotos[11], portfolioPhotos[0]],
+    phone: '+593 92 111 2222',
+    email: 'maria.torres@email.com',
+    frequentJobs: [
+      { name: 'Pintura de habitaciones', price: 20 },
+      { name: 'Pintura de fachadas', price: 35 },
+      { name: 'Aplicación de textura', price: 28 },
+      { name: 'Pintura de portones', price: 25 }
+    ]
   },
   {
     id: 9,
@@ -172,6 +285,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Gasfitero'],
     photo: hombreFotos[4],
+    experience: '9 años de experiencia',
+    certifications: ['Instalaciones de Gas', 'Seguridad en Gas', 'Calderas y Calentadores'],
+    skills: ['Instalación de gas domiciliario', 'Reparación de calderas', 'Detección de fugas', 'Calentadores instantáneos'],
+    portfolioPhotos: [portfolioPhotos[3], portfolioPhotos[6], portfolioPhotos[9]],
+    phone: '+593 91 333 4444',
+    email: 'pedro.mendoza@email.com',
+    frequentJobs: [
+      { name: 'Instalación de gas doméstico', price: 25 },
+      { name: 'Cambio de mangueras de gas', price: 15 },
+      { name: 'Reparación de calentadores', price: 30 },
+      { name: 'Revisión de fugas de gas', price: 18 }
+    ]
   },
   {
     id: 10,
@@ -185,6 +310,18 @@ const verifiedWorkers = [
     isPremium: true,
     description: professionDescriptions['Cerrajera'],
     photo: mujerFotos[4],
+    experience: '8 años de experiencia',
+    certifications: ['Cerrajería de Seguridad', 'Llaves Codificadas', 'Sistemas Electrónicos'],
+    skills: ['Apertura sin daños', 'Cambio de combinaciones', 'Cerraduras electrónicas', 'Sistemas de seguridad'],
+    portfolioPhotos: [portfolioPhotos[4], portfolioPhotos[7], portfolioPhotos[10]],
+    phone: '+593 90 555 6666',
+    email: 'gabriela.ruiz@email.com',
+    frequentJobs: [
+      { name: 'Apertura de puertas', price: 20 },
+      { name: 'Cambio de cerraduras', price: 25 },
+      { name: 'Duplicado de llaves', price: 8 },
+      { name: 'Instalación de chapas', price: 30 }
+    ]
   },
 ];
 
@@ -230,6 +367,30 @@ const unverifiedWorkers = Array.from({ length: 40 }).map((_, i) => {
 export const mockWorkers = [
   ...verifiedWorkers,
   ...unverifiedWorkers,
+];
+
+// Mock de propuestas para trabajos
+export const mockProposals = [
+  { id: 1, name: 'Carlos Ruiz', price: 20, message: 'Puedo hacerlo hoy mismo.' },
+  { id: 2, name: 'Andrea Molina', price: 22, message: 'Tengo experiencia en este tipo de trabajos.' },
+  { id: 3, name: 'Pedro Sánchez', price: 18, message: 'Trabajo rápido y garantizado.' },
+  { id: 4, name: 'Lucía Torres', price: 25, message: 'Llevo mis propias herramientas.' },
+];
+
+// Imágenes simuladas de trabajos realizados o en progreso
+export const mockJobImages = [
+  'https://images.pexels.com/photos/162539/architecture-building-joy-business-162539.jpeg',
+  'https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg',
+  'https://images.pexels.com/photos/834892/pexels-photo-834892.jpeg',
+  'https://images.pexels.com/photos/159045/the-interior-of-the-repair-interior-design-159045.jpeg',
+  'https://images.pexels.com/photos/271816/pexels-photo-271816.jpeg',
+  'https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg',
+  'https://images.pexels.com/photos/221024/pexels-photo-221024.jpeg',
+  'https://images.pexels.com/photos/280232/pexels-photo-280232.jpeg',
+  'https://images.pexels.com/photos/2251247/pexels-photo-2251247.jpeg',
+  'https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg',
+  'https://images.pexels.com/photos/1112059/pexels-photo-1112059.jpeg',
+  'https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg'
 ];
 
 // Mocks de trabajos del cliente

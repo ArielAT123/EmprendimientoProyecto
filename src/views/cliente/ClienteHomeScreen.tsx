@@ -14,7 +14,7 @@ import {
 import tw from 'twrnc';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FloatingChatBot from '../../components/ChatBotComponent';
-import { mockWorkers, ORANGE_PRIMARY, ORANGE_LIGHTER, ORANGE_ACCENT, ORANGE_LIGHT, ORANGE_DARK, ORANGE_DARKER } from '../../views/cliente/Datos/datos';
+import { mockWorkers, ORANGE_PRIMARY, ORANGE_LIGHTER, ORANGE_ACCENT, ORANGE_LIGHT, ORANGE_DARK, ORANGE_DARKER, portfolioPhotos } from '../../views/cliente/Datos/datos';
 
 const ClienteHomeScreen = ({ navigation }: any) => {
   const [searchText, setSearchText] = useState('');
@@ -25,14 +25,54 @@ const ClienteHomeScreen = ({ navigation }: any) => {
   const [notifications, setNotifications] = useState([
     {
       id: 1,
-      message: '¡Luis Gómez aceptó tu oferta!',
+      type: 'job_accepted',
+      title: 'Oferta Aceptada',
+      message: 'Luis Gómez aceptó tu solicitud de trabajo eléctrico',
       time: 'Hace 2 min',
+      isRead: false,
+      icon: 'check-circle',
+      color: '#10B981'
     },
     {
       id: 2,
-      message: '¡Ana López aceptó tu oferta!',
+      type: 'job_accepted',
+      title: 'Oferta Aceptada', 
+      message: 'Ana López aceptó tu solicitud de reparación de computadora',
       time: 'Hace 1 hora',
+      isRead: false,
+      icon: 'check-circle',
+      color: '#10B981'
     },
+    {
+      id: 3,
+      type: 'job_completed',
+      title: 'Trabajo Completado',
+      message: 'María Torres completó el trabajo de pintura. ¡Califica su servicio!',
+      time: 'Hace 3 horas',
+      isRead: true,
+      icon: 'star',
+      color: '#F59E0B'
+    },
+    {
+      id: 4,
+      type: 'new_proposal',
+      title: 'Nueva Propuesta',
+      message: 'Pedro Mendoza envió una propuesta para tu trabajo de gasfitería',
+      time: 'Hace 5 horas',
+      isRead: true,
+      icon: 'assignment',
+      color: '#3B82F6'
+    },
+    {
+      id: 5,
+      type: 'reminder',
+      title: 'Recordatorio',
+      message: 'Tu trabajo con Jorge Zambrano está programado para mañana a las 9:00 AM',
+      time: 'Hace 1 día',
+      isRead: true,
+      icon: 'schedule',
+      color: '#8B5CF6'
+    }
   ]);
 
   const categories = [
@@ -41,6 +81,7 @@ const ClienteHomeScreen = ({ navigation }: any) => {
     { label: 'Construcción', value: 'Construcción' },
     { label: 'Plomería', value: 'Plomero' },
     { label: 'Electricidad', value: 'Electricista' },
+    { label: 'Servicios Generales', value: 'Servicios' },
   ];
 
   const avatarBgColor = ORANGE_LIGHTER;
@@ -55,16 +96,36 @@ const ClienteHomeScreen = ({ navigation }: any) => {
           worker.location.toLowerCase().includes(searchText.toLowerCase())
         );
       }
-      return (
-        (worker.profession.toLowerCase().includes(selectedCategory.toLowerCase())) &&
-        (
-          worker.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          worker.profession.toLowerCase().includes(searchText.toLowerCase()) ||
-          worker.location.toLowerCase().includes(searchText.toLowerCase())
-        )
+      
+      // Filtrado por categorías específicas
+      let matchesCategory = false;
+      const profession = worker.profession.toLowerCase();
+      
+      if (selectedCategory === 'Técnico') {
+        matchesCategory = profession.includes('técnico');
+      } else if (selectedCategory === 'Construcción') {
+        matchesCategory = profession.includes('construcción') || profession.includes('maestro') || profession.includes('carpinter');
+      } else if (selectedCategory === 'Plomero') {
+        matchesCategory = profession.includes('plomer') || profession.includes('gasfiter');
+      } else if (selectedCategory === 'Electricista') {
+        matchesCategory = profession.includes('electricista');
+      } else if (selectedCategory === 'Servicios') {
+        matchesCategory = profession.includes('jardinero') || profession.includes('pintor') || profession.includes('cerrajer');
+      }
+      
+      return matchesCategory && (
+        worker.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        worker.profession.toLowerCase().includes(searchText.toLowerCase()) ||
+        worker.location.toLowerCase().includes(searchText.toLowerCase())
       );
     })
     .sort((a, b) => (a.isPremium === b.isPremium) ? 0 : a.isPremium ? -1 : 1);
+
+  const markAllAsRead = () => {
+    setNotifications(prev => 
+      prev.map(notif => ({ ...notif, isRead: true }))
+    );
+  };
 
   const handleWorkerPress = (worker: any) => {
     setSelectedWorker(worker);
@@ -140,16 +201,12 @@ const ClienteHomeScreen = ({ navigation }: any) => {
               onPress={() => setNotificationsVisible(true)}
             >
               <MaterialIcons name="notifications" size={24} color={ORANGE_PRIMARY} />
-              <View style={tw`absolute -top-1 -right-1 bg-[${ORANGE_DARK}] w-5 h-5 rounded-full items-center justify-center`}>
-                <Text style={tw`text-white text-xs font-bold`}>{notifications.length}</Text>
-              </View>
+              {notifications.filter(n => !n.isRead).length > 0 && (
+                <View style={tw`absolute -top-1 -right-1 bg-[${ORANGE_DARK}] w-5 h-5 rounded-full items-center justify-center`}>
+                  <Text style={tw`text-white text-xs font-bold`}>{notifications.filter(n => !n.isRead).length}</Text>
+                </View>
+              )}
             </TouchableOpacity>
-            {/* Foto real del cliente */}
-            <Image
-              source={{ uri: 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg' }}
-              style={tw`w-10 h-10 rounded-full ml-3`}
-              resizeMode="cover"
-            />
           </View>
         </View>
       </View>
@@ -212,89 +269,216 @@ const ClienteHomeScreen = ({ navigation }: any) => {
         transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-          <View style={tw`flex-1 bg-black bg-opacity-40 justify-end`}>
-            <TouchableWithoutFeedback>
-              <View style={tw`bg-white rounded-t-2xl p-6`}>
-                {selectedWorker && (
-                  <>
-                    <View style={tw`items-center mb-4`}>
-                      {/* Foto real del trabajador, más grande y centrada */}
-                      <Image
-                        source={{ uri: selectedWorker.photo }}
-                        style={tw`w-28 h-28 rounded-full mb-3`}
-                        resizeMode="cover"
-                      />
-                      <Text style={tw`text-gray-900 font-bold text-xl mt-2`}>{selectedWorker.name}</Text>
-                      <Text style={tw`text-[${ORANGE_PRIMARY}] font-medium mt-1`}>{selectedWorker.profession}</Text>
-                      <View style={tw`flex-row items-center mt-2`}>
-                        {selectedWorker.isPremium && (
-                          <MaterialIcons name="verified" size={18} color={ORANGE_PRIMARY} style={tw`mr-1`} />
-                        )}
-                        <MaterialIcons name="star" size={16} color="#FFBF00" />
-                        <Text style={tw`text-gray-700 text-base ml-1 font-medium`}>{selectedWorker.rating.toFixed(1)}</Text>
-                        <Text style={tw`text-gray-500 text-base ml-1`}>• {selectedWorker.totalJobs} trabajos</Text>
+        <View style={tw`flex-1 bg-black bg-opacity-50 justify-center p-4`}>
+          <View style={tw`bg-white rounded-xl max-h-[85%]`}>
+            {selectedWorker && (
+              <>
+                {/* Header con botón cerrar */}
+                <View style={tw`relative p-4 border-b border-gray-200`}>
+                  <TouchableOpacity
+                    style={tw`absolute top-2 right-2 p-2`}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <MaterialIcons name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                  
+                  <View style={tw`items-center pt-2`}>
+                    <Image
+                      source={{ uri: selectedWorker.photo }}
+                      style={tw`w-24 h-24 rounded-full mb-3`}
+                      resizeMode="cover"
+                    />
+                    <Text style={tw`text-xl font-bold text-gray-800`}>{selectedWorker.name}</Text>
+                    <Text style={tw`text-[${ORANGE_PRIMARY}] font-medium`}>{selectedWorker.profession}</Text>
+                    <View style={tw`flex-row items-center mt-2`}>
+                      {selectedWorker.isPremium && (
+                        <MaterialIcons name="verified" size={16} color={ORANGE_PRIMARY} style={tw`mr-1`} />
+                      )}
+                      <MaterialIcons name="star" size={16} color="#FFBF00" />
+                      <Text style={tw`text-gray-600 ml-1`}>{selectedWorker.rating?.toFixed(1)} • {selectedWorker.totalJobs} trabajos</Text>
+                    </View>
+                    <Text style={tw`text-gray-500 mt-1`}>📍 {selectedWorker.location}</Text>
+                  </View>
+                </View>
+
+                {/* Contenido scrolleable */}
+                <ScrollView style={tw`p-4`} showsVerticalScrollIndicator={false}>
+                  {/* Descripción */}
+                  <Text style={tw`text-gray-700 mb-4 text-center`}>{selectedWorker.description}</Text>
+                  
+                  {/* Experiencia y Contacto */}
+                  {selectedWorker.experience && (
+                    <View style={tw`mb-3`}>
+                      <Text style={tw`font-bold text-[${ORANGE_DARK}] mb-1`}>Experiencia:</Text>
+                      <Text style={tw`text-gray-600`}>{selectedWorker.experience}</Text>
+                    </View>
+                  )}
+                  
+                  {selectedWorker.phone && (
+                    <View style={tw`mb-3`}>
+                      <Text style={tw`font-bold text-[${ORANGE_DARK}] mb-1`}>Contacto:</Text>
+                      <Text style={tw`text-gray-600`}>{selectedWorker.phone}</Text>
+                    </View>
+                  )}
+
+                  {/* Certificaciones */}
+                  {selectedWorker.certifications && selectedWorker.certifications.length > 0 && (
+                    <View style={tw`mb-3`}>
+                      <Text style={tw`font-bold text-[${ORANGE_DARK}] mb-2`}>Certificaciones:</Text>
+                      <View style={tw`flex-row flex-wrap`}>
+                        {selectedWorker.certifications.map((cert: string, index: number) => (
+                          <Text key={index} style={tw`bg-[${ORANGE_LIGHTER}] text-[${ORANGE_DARK}] px-2 py-1 rounded text-xs mr-2 mb-1`}>
+                            {cert}
+                          </Text>
+                        ))}
                       </View>
-                      <Text style={tw`text-gray-500 text-sm mt-1`}>📍 {selectedWorker.location}</Text>
                     </View>
-                    <Text style={tw`text-gray-800 mb-4 text-center`}>{selectedWorker.description}</Text>
-                    <View style={tw`flex-row justify-between items-center mb-4 px-2`}>
-                      <Text style={tw`text-[${ORANGE_PRIMARY}] font-bold text-xl`}>${selectedWorker.price}</Text>
-                      <Text style={tw`text-gray-500 text-base`}>por trabajo</Text>
+                  )}
+
+                  {/* Habilidades */}
+                  {selectedWorker.skills && selectedWorker.skills.length > 0 && (
+                    <View style={tw`mb-3`}>
+                      <Text style={tw`font-bold text-[${ORANGE_DARK}] mb-2`}>Especialidades:</Text>
+                      {selectedWorker.skills.map((skill: string, index: number) => (
+                        <Text key={index} style={tw`text-gray-600 mb-1`}>• {skill}</Text>
+                      ))}
                     </View>
-                    <View style={tw`flex-row justify-end`}>
-                      <TouchableOpacity
-                        style={tw`bg-[${ORANGE_PRIMARY}] px-5 py-2 rounded-lg mr-2`}
-                        onPress={() => {
-                          setModalVisible(false);
-                          navigation.navigate('CreateJob');
-                        }}
-                      >
-                        <Text style={tw`text-white font-bold`}>Contratar</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={tw`bg-gray-200 px-5 py-2 rounded-lg`}
-                        onPress={() => setModalVisible(false)}
-                      >
-                        <Text style={tw`text-gray-700 font-bold`}>Cerrar</Text>
-                      </TouchableOpacity>
+                  )}
+
+                  {/* Portafolio */}
+                  {selectedWorker.portfolioPhotos && selectedWorker.portfolioPhotos.length > 0 && (
+                    <View style={tw`mb-4`}>
+                      <Text style={tw`font-bold text-[${ORANGE_DARK}] mb-2`}>Portafolio:</Text>
+                      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {selectedWorker.portfolioPhotos.map((photo: string, index: number) => (
+                          <Image
+                            key={index}
+                            source={{ uri: photo }}
+                            style={tw`w-20 h-20 rounded-lg mr-2`}
+                            resizeMode="cover"
+                          />
+                        ))}
+                      </ScrollView>
                     </View>
-                  </>
-                )}
-              </View>
-            </TouchableWithoutFeedback>
+                  )}
+                  
+                  {/* Trabajos Frecuentes */}
+                  {selectedWorker.frequentJobs && selectedWorker.frequentJobs.length > 0 && (
+                    <View style={tw`mb-4`}>
+                      <Text style={tw`font-bold text-[${ORANGE_DARK}] mb-2`}>Trabajos Frecuentes:</Text>
+                      {selectedWorker.frequentJobs.map((job: any, index: number) => (
+                        <View key={index} style={tw`flex-row justify-between items-center py-2 px-3 bg-gray-50 rounded-lg mb-2`}>
+                          <Text style={tw`text-gray-700 flex-1`}>{job.name}</Text>
+                          <Text style={tw`font-bold text-[${ORANGE_PRIMARY}]`}>${job.price}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                  
+                  {/* Precios */}
+                  <View style={tw`bg-[${ORANGE_LIGHTER}] p-3 rounded-lg mb-4`}>
+                    <Text style={tw`font-bold text-[${ORANGE_DARK}] mb-2`}>Tarifa Base:</Text>
+                    <Text style={tw`text-gray-700`}>Por trabajo: <Text style={tw`font-bold text-[${ORANGE_PRIMARY}]`}>${selectedWorker.price}</Text></Text>
+                  </View>
+                </ScrollView>
+
+                {/* Botón contratar */}
+                <View style={tw`p-4 border-t border-gray-200`}>
+                  <TouchableOpacity
+                    style={tw`bg-[${ORANGE_PRIMARY}] py-3 rounded-lg`}
+                    onPress={() => {
+                      setModalVisible(false);
+                      let selectedCategoryId = 'tecnicos';
+                      const profession = selectedWorker.profession.toLowerCase();
+                      
+                      if (profession.includes('técnico')) {
+                        selectedCategoryId = 'tecnicos';
+                      } else if (profession.includes('construcción') || profession.includes('maestro') || profession.includes('carpinter')) {
+                        selectedCategoryId = 'construccion';
+                      } else if (profession.includes('plomer') || profession.includes('gasfiter')) {
+                        selectedCategoryId = 'plomeria';
+                      } else if (profession.includes('electricista')) {
+                        selectedCategoryId = 'electricidad';
+                      } else if (profession.includes('jardinero') || profession.includes('pintor') || profession.includes('cerrajer')) {
+                        selectedCategoryId = 'servicios';
+                      }
+                      
+                      navigation.navigate('HireScreen', { 
+                        selectedWorker: selectedWorker,
+                        preselectedCategory: selectedCategoryId
+                      });
+                    }}
+                  >
+                    <Text style={tw`text-white font-bold text-center text-base`}>Contratar Ahora</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       </Modal>
 
       {/* Modal de notificaciones */}
       <Modal
         visible={notificationsVisible}
-        animationType="fade"
+        animationType="slide"
         transparent
         onRequestClose={() => setNotificationsVisible(false)}
       >
         <TouchableWithoutFeedback onPress={() => setNotificationsVisible(false)}>
-          <View style={tw`flex-1 bg-black bg-opacity-40 justify-end`}>
+          <View style={tw`flex-1 bg-black bg-opacity-40 justify-start`}>
             <TouchableWithoutFeedback>
-              <View style={tw`bg-white rounded-t-2xl p-6 max-h-96`}>
-                <Text style={tw`text-lg font-bold mb-4 text-[${ORANGE_PRIMARY}]`}>Notificaciones</Text>
-                {notifications.length === 0 ? (
-                  <Text style={tw`text-gray-500 text-center`}>No tienes notificaciones nuevas.</Text>
-                ) : (
-                  notifications.map((notif) => (
-                    <View key={notif.id} style={tw`mb-3`}>
-                      <Text style={tw`text-gray-900`}>{notif.message}</Text>
-                      <Text style={tw`text-gray-400 text-xs`}>{notif.time}</Text>
+              <View style={[tw`bg-white rounded-b-2xl mx-4 mt-20`, { minHeight: '60%', maxHeight: '80%' }]}>
+                {/* Header del modal */}
+                <View style={tw`flex-row justify-between items-center p-4 border-b border-gray-200`}>
+                  <Text style={tw`text-xl font-bold text-[${ORANGE_PRIMARY}]`}>Notificaciones</Text>
+                  <TouchableOpacity 
+                    onPress={markAllAsRead}
+                    style={tw`bg-[${ORANGE_LIGHTER}] px-3 py-1 rounded-full`}
+                  >
+                    <Text style={tw`text-[${ORANGE_DARK}] text-sm font-medium`}>Marcar todas</Text>
+                  </TouchableOpacity>
+                </View>
+
+                {/* Lista de notificaciones */}
+                <ScrollView style={tw`flex-1 p-4`} showsVerticalScrollIndicator={false}>
+                  {notifications.length === 0 ? (
+                    <View style={tw`items-center py-8`}>
+                      <MaterialIcons name="notifications-none" size={48} color="#9CA3AF" />
+                      <Text style={tw`text-gray-500 text-center mt-3`}>No tienes notificaciones nuevas</Text>
                     </View>
-                  ))
-                )}
-                <TouchableOpacity
-                  style={tw`mt-4 bg-[${ORANGE_PRIMARY}] px-5 py-2 rounded-lg self-end`}
-                  onPress={() => setNotificationsVisible(false)}
-                >
-                  <Text style={tw`text-white font-bold`}>Cerrar</Text>
-                </TouchableOpacity>
+                  ) : (
+                    notifications.map((notif) => (
+                      <View 
+                        key={notif.id} 
+                        style={tw`${!notif.isRead ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-100'} p-4 rounded-2xl mb-3 border-2`}
+                      >
+                        <View style={tw`flex-row`}>
+                          {/* Icono */}
+                          <View style={tw`mr-3 mt-1`}>
+                            <MaterialIcons name={notif.icon} size={24} color={notif.color} />
+                            {!notif.isRead && (
+                              <View style={tw`absolute -top-1 -right-1 w-3 h-3 bg-[${ORANGE_PRIMARY}] rounded-full`} />
+                            )}
+                          </View>
+                          
+                          {/* Contenido */}
+                          <View style={tw`flex-1`}>
+                            <Text style={tw`${!notif.isRead ? 'font-bold' : 'font-medium'} text-gray-900 text-base mb-1`}>
+                              {notif.title}
+                            </Text>
+                            <Text style={tw`text-gray-600 text-sm leading-5 mb-2`}>
+                              {notif.message}
+                            </Text>
+                            <Text style={tw`text-gray-400 text-xs`}>
+                              {notif.time}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    ))
+                  )}
+                </ScrollView>
               </View>
             </TouchableWithoutFeedback>
           </View>

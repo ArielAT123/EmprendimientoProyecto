@@ -6,6 +6,7 @@ import RegisterScreen from './src/views/registro/RegisterScreen';
 import TabNavigatorTrabajadores from './src/navigation/tabNavigationTrabajadores';
 import TabNavigatorClientes from './src/navigation/TabNavigatorClientes';
 import CreateJobScreen from './src/views/cliente/CreateJobScreen';
+import HireScreen from './src/views/cliente/HireScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,11 @@ export default function App() {
         <Stack.Screen 
           name="CreateJob" 
           component={CreateJobScreen}  
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="HireScreen" 
+          component={HireScreen}  
           options={{ headerShown: false }}
         />
         <Stack.Screen 
