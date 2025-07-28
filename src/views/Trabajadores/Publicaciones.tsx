@@ -179,23 +179,57 @@ export default function MyPostsScreen() {
     };
 
     return (
-        <View style={tw`flex-1 bg-gray-50`}>
-            {/* Header with Orange Gradient */}
-            <View style={[tw`px-5 py-4 rounded-b-lg shadow-lg py-5 mt-10`, { backgroundColor: ORANGE_PRIMARY }]}>
-                <Text style={tw`text-2xl font-bold text-white`}>Mis Publicaciones</Text>
-                <Text style={[tw`mt-1`, { color: ORANGE_LIGHTER }]}>Administra tus trabajos de electricidad</Text>
+        <View style={tw`flex-1 bg-white`}>
+            {/* Espacio arriba del header */}
+            <View style={tw`h-6`} />
+            
+            {/* Header: mismo estilo que TrabajadorHomeScreen */}
+            <View
+                style={{
+                    padding: 16,
+                    backgroundColor: '#FFFFFF',
+                    borderBottomLeftRadius: 24,
+                    borderBottomRightRadius: 24,
+                    shadowColor: ORANGE_PRIMARY,
+                    shadowOpacity: 0.15,
+                    shadowRadius: 8,
+                    shadowOffset: { width: 0, height: 4 },
+                    elevation: 8,
+                }}
+            >
+                <View style={tw`flex-row justify-between items-center`}>
+                    <View>
+                        <Text style={{ color: '#111', fontSize: 24, fontWeight: 'bold' }}>
+                            Mis Publicaciones
+                        </Text>
+                        <Text style={{ color: '#666', fontSize: 14, opacity: 0.9 }}>
+                            Administra tus trabajos de electricidad
+                        </Text>
+                    </View>
+                    <View style={tw`flex-row items-center`}>
+                        <View style={[
+                            tw`px-3 py-2 rounded-full`,
+                            { backgroundColor: ORANGE_ACCENT }
+                        ]}>
+                            <Text style={[tw`text-sm font-bold`, { color: ORANGE_DARKER }]}>
+                                {filteredPosts.length}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
             </View>
 
-            {/* Search Bar with Orange Accent */}
-            <View style={tw`px-5 py-4 bg-white shadow-sm`}>
+            {/* Search Bar */}
+                        {/* Search Bar with Orange Accent */}
+            <View style={tw`px-4 py-4 bg-white`}>
                 <View style={tw`relative`}>
                     <TextInput
                         placeholder="Buscar por etiqueta, título o descripción..."
                         placeholderTextColor="#9CA3AF"
                         value={searchQuery}
                         onChangeText={setSearchQuery}
-                        style={[tw`pl-4 pr-10 py-3 border-2 rounded-lg text-gray-900 bg-white`, 
-                               { borderColor: searchQuery ? ORANGE_ACCENT : '#E5E7EB' }]}
+                        style={[tw`pl-4 pr-10 py-3 border rounded-lg text-gray-900 bg-white`, 
+                               { borderColor: searchQuery ? ORANGE_PRIMARY : '#E5E7EB' }]}
                     />
                     {searchQuery.length > 0 && (
                         <TouchableOpacity
@@ -214,9 +248,9 @@ export default function MyPostsScreen() {
             {/* Content */}
             <ScrollView contentContainerStyle={tw`pb-6 py-4`}>
                 {isLoading ? (
-                    <View style={tw`mt-6 px-5`}>
+                    <View style={tw`mt-6 px-4`}>
                         {[1, 2, 3].map((_, i) => (
-                            <View key={i} style={tw`bg-white rounded-lg p-4 mb-4 shadow-sm`}>
+                            <View key={i} style={tw`bg-white rounded-xl p-4 mb-4 shadow-sm border border-[${ORANGE_LIGHTER}]`}>
                                 <View style={tw`flex-row`}>
                                     <View style={[tw`w-16 h-16 rounded-lg mr-4`, { backgroundColor: ORANGE_LIGHTER }]} />
                                     <View style={tw`flex-1`}>
@@ -229,7 +263,7 @@ export default function MyPostsScreen() {
                         ))}
                     </View>
                 ) : filteredPosts.length === 0 ? (
-                    <View style={tw`mx-5 mt-6 bg-white p-6 rounded-lg items-center shadow-sm`}>
+                    <View style={tw`mx-4 mt-6 bg-white p-6 rounded-xl items-center shadow-sm border border-[${ORANGE_LIGHTER}]`}>
                         <Text style={tw`text-gray-500 text-center`}>
                             No se encontraron resultados para "{searchQuery}"
                         </Text>
@@ -244,11 +278,11 @@ export default function MyPostsScreen() {
                         </TouchableOpacity>
                     </View>
                 ) : (
-                    <View style={tw`px-5`}>
+                    <View style={tw`px-4`}>
                         {filteredPosts.map((post, index) => (
                             <View
                                 key={index}
-                                style={[tw`bg-white rounded-lg shadow-md p-4 mb-4 border-l-4`, 
+                                style={[tw`bg-white rounded-xl shadow-sm p-4 mb-4 border border-[${ORANGE_LIGHTER}] border-l-4`, 
                                        { borderLeftColor: ORANGE_PRIMARY }]}
                             >
                                 <View style={tw`mb-3`}>
@@ -263,7 +297,7 @@ export default function MyPostsScreen() {
                                         resizeMode="cover"
                                     />
                                 ) : (
-                                    <View style={[tw`p-4 rounded-lg mb-3`, { backgroundColor: ORANGE_LIGHTER }]}>
+                                    <View style={tw`p-4 rounded-lg mb-3 bg-gray-50 border border-gray-200`}>
                                         <Text style={tw`text-gray-700`}>{post.postContent}</Text>
                                     </View>
                                 )}
@@ -276,12 +310,13 @@ export default function MyPostsScreen() {
                                         <TouchableOpacity
                                             key={tagIndex}
                                             style={[tw`${getTagStyle(`${index}-${tagIndex}`)}`, 
-                                                   { backgroundColor: hoveredTag === `${index}-${tagIndex}` ? ORANGE_ACCENT : ORANGE_LIGHTER }]}
+                                                   { backgroundColor: hoveredTag === `${index}-${tagIndex}` ? ORANGE_ACCENT : 'white', 
+                                                     borderWidth: 1, borderColor: ORANGE_LIGHTER }]}
                                             onPress={() => setSearchQuery(tag)}
                                             onPressIn={() => setHoveredTag(`${index}-${tagIndex}`)}
                                             onPressOut={() => setHoveredTag(null)}
                                         >
-                                            <Text style={[tw`text-xs font-medium`, { color: ORANGE_DARKER }]}>{tag}</Text>
+                                            <Text style={[tw`text-xs font-medium`, { color: hoveredTag === `${index}-${tagIndex}` ? ORANGE_DARKER : ORANGE_PRIMARY }]}>{tag}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </View>
