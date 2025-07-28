@@ -254,51 +254,7 @@ const HomeScreen = () => {
                 </Animated.View>
 
                 {/* Botón Empresa */}
-                <Animated.View style={{ transform: [{ scale: buttonScale3 }] }}>
-                  <TouchableOpacity
-                    style={[
-                      tw`bg-white rounded-2xl p-5 mt-2 relative overflow-hidden`,
-                      {
-                        borderWidth: 2,
-                        borderColor: pastelOrangeDark, // Gris elegante para empresa
-                        shadowColor: pastelOrangeDark,
-                        shadowOffset: { width: 0, height: 4 },
-                        shadowOpacity: 0.15,
-                        shadowRadius: 8,
-                        elevation: 5,
-                      }
-                    ]}
-                    onPress={() => navigation.navigate('CompanyScreen')}
-                    onPressIn={() => handlePressIn(buttonScale3)}
-                    onPressOut={() => handlePressOut(buttonScale3)}
-                    activeOpacity={0.9}
-                  >
-                    <View style={[
-                      {
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: pastelOrangeDark,
-                      },
-                      tw`opacity-5`
-                    ]} />
-
-                    <View style={tw`flex-row items-center justify-center`}>
-
-                      <Text style={[
-                        tw`text-xl font-bold`,
-                        {
-                          letterSpacing: 0.5,
-                          color: pastelOrangeDark
-                        }
-                      ]}>
-                        Empresa
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </Animated.View>
+               
               </View>
 
               {/* Footer decorativo */}
