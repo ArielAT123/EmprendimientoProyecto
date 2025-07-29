@@ -1,21 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  Modal, 
-  FlatList, 
-  KeyboardAvoidingView, 
-  Platform, 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
   Dimensions,
-  StyleSheet 
+  StyleSheet,
+  Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { sendMessageToDialogflow } from '../apis/chatbot';
 
 const { width } = Dimensions.get('window');
 const pastelOrangeDark = '#FF8C42'; // Naranja pastel más oscuro
+const jibbyOrange = '#f87224ff'; // Color principal de Jibby
+const jibbyLightOrange = '#f6953bff'; // Color secundario de Jibby
 
 type Message = {
   id: string;
@@ -42,11 +45,11 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([
-    { 
-      id: 'initial', 
-      text: '¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?', 
-      isUser: false, 
-      timestamp: getFormattedTimestamp() 
+    {
+      id: 'initial',
+      text: '¡Hola! Soy Jibby, tu asistente virtual. ¿En qué puedo ayudarte hoy?',
+      isUser: false,
+      timestamp: getFormattedTimestamp()
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
@@ -54,12 +57,12 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
 
   const handleSend = async () => {
     if (!message.trim()) return;
-    
-    const userMessage: Message = { 
-      id: Date.now().toString(), 
-      text: message, 
-      isUser: true, 
-      timestamp: getFormattedTimestamp() 
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: message,
+      isUser: true,
+      timestamp: getFormattedTimestamp()
     };
     setMessages(prev => [...prev, userMessage]);
     setMessage('');
@@ -67,17 +70,17 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
 
     try {
       const response = await sendMessageToDialogflow(message);
-      
-      const botMessage = { 
-        id: (Date.now() + 1).toString(), 
-        text: response.fulfillmentText, 
-        isUser: false, 
+
+      const botMessage = {
+        id: (Date.now() + 1).toString(),
+        text: response.fulfillmentText,
+        isUser: false,
         timestamp: getFormattedTimestamp(),
         servicios: response.servicios
       };
-      
+
       setMessages(prev => [...prev, botMessage]);
-      
+
       if (response.servicios && response.servicios.length > 0) {
         updateServices(response.servicios);
       }
@@ -96,25 +99,50 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
 
   const renderMessage = ({ item }: { item: Message }) => (
     <View style={[
-      styles.messageContainer,
-      item.isUser ? styles.userMessage : styles.botMessage
+      styles.messageWrapper,
+      item.isUser ? styles.userMessageWrapper : styles.botMessageWrapper
     ]}>
-      <Text style={styles.messageText}>{item.text}</Text>
-      
-      {item.servicios && item.servicios.length > 0 && (
-        <View style={styles.servicesContainer}>
-          <Text style={styles.servicesTitle}>Servicios recomendados:</Text>
-          <View style={styles.servicesTagsContainer}>
-            {item.servicios.map((servicio, index) => (
-              <View key={index} style={styles.serviceTag}>
-                <Text style={styles.serviceText}>{servicio}</Text>
-              </View>
-            ))}
-          </View>
+      {!item.isUser && (
+        <View style={styles.avatarContainer}>
+          <Image
+            source={require('../../assets/jibby.png')}
+            style={styles.jibbyAvatar}
+            resizeMode="cover"
+          />
         </View>
       )}
-      
-      <Text style={styles.timestamp}>{item.timestamp}</Text>
+
+      <View style={[
+        styles.messageContainer,
+        item.isUser ? styles.userMessage : styles.botMessage
+      ]}>
+        <Text style={[
+          styles.messageText,
+          item.isUser ? styles.userMessageText : styles.botMessageText
+        ]}>
+          {item.text}
+        </Text>
+
+        {item.servicios && item.servicios.length > 0 && (
+          <View style={styles.servicesContainer}>
+            <Text style={styles.servicesTitle}>Servicios recomendados:</Text>
+            <View style={styles.servicesTagsContainer}>
+              {item.servicios.map((servicio, index) => (
+                <View key={index} style={styles.serviceTag}>
+                  <Text style={styles.serviceText}>{servicio}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        <Text style={[
+          styles.timestamp,
+          item.isUser ? styles.userTimestamp : styles.botTimestamp
+        ]}>
+          {item.timestamp}
+        </Text>
+      </View>
     </View>
   );
 
@@ -124,7 +152,11 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
         style={styles.fab}
         onPress={() => setModalVisible(true)}
       >
-        <Ionicons name="chatbubble-ellipses" size={24} color="white" />
+        <Image
+          source={require('../../assets/jibby.png')}
+          style={styles.fabImage}
+          resizeMode="cover"
+        />
       </TouchableOpacity>
 
       <Modal
@@ -140,8 +172,18 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
           <View style={styles.modalOverlay}>
             <View style={styles.chatContainer}>
               <View style={styles.header}>
-                <Text style={styles.headerText}>Asistente Virtual</Text>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <View style={styles.headerContent}>
+                  <Image
+                    source={require('../../assets/jibby.png')}
+                    style={styles.headerAvatar}
+                    resizeMode="cover"
+                  />
+                  <View style={styles.headerTextContainer}>
+                    <Text style={styles.headerText}>Jibby</Text>
+                    <Text style={styles.headerSubtext}>Tu asistente virtual</Text>
+                  </View>
+                </View>
+                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
                   <Ionicons name="close" size={24} color="#6b7280" />
                 </TouchableOpacity>
               </View>
@@ -153,17 +195,27 @@ const FloatingChatBot: React.FC<FloatingChatBotProps> = ({ chatBotServices }) =>
                 keyExtractor={item => item.id}
                 style={styles.messagesList}
                 contentContainerStyle={styles.messagesContent}
+                showsVerticalScrollIndicator={false}
               />
 
               {isTyping && (
-                <View style={styles.typingIndicator}>
-                  <Text style={styles.typingText}>Asistente está escribiendo...</Text>
+                <View style={styles.typingWrapper}>
+                  <View style={styles.typingAvatarContainer}>
+                    <Image
+                      source={require('../../assets/jibby.png')}
+                      style={styles.typingAvatar}
+                      resizeMode="cover"
+                    />
+                  </View>
+                  <View style={styles.typingIndicator}>
+                    <Text style={styles.typingText}>Jibby está escribiendo...</Text>
+                  </View>
                 </View>
               )}
 
               <View style={styles.inputContainer}>
                 <TextInput
-                  placeholder="Escribe tu mensaje..."
+                  placeholder="Escribe tu mensaje a Jibby..."
                   placeholderTextColor="#9ca3af"
                   value={message}
                   onChangeText={setMessage}
@@ -192,17 +244,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 30,
     right: 20,
-    backgroundColor: pastelOrangeDark,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    backgroundColor: jibbyOrange,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 4,
+    elevation: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
-    shadowRadius: 3,
+    shadowRadius: 4,
+    borderWidth: 3,
+    borderColor: '#fff',
+  },
+  fabImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
   modalContainer: {
     flex: 1,
@@ -215,60 +274,120 @@ const styles = StyleSheet.create({
   },
   chatContainer: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 16,
     width: width * 0.9,
-    maxHeight: '80%',
+    maxHeight: '85%',
     padding: 16,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f4f6',
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 12,
+    borderWidth: 2,
+    borderColor: jibbyOrange,
+  },
+  headerTextContainer: {
+    flex: 1,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#111827',
+    color: jibbyOrange,
+  },
+  headerSubtext: {
+    fontSize: 12,
+    color: '#6b7280',
+    marginTop: 2,
+  },
+  closeButton: {
+  position: 'absolute',
+  right: 5,
+  top: 5,
   },
   messagesList: {
     flexGrow: 1,
-    marginBottom: 8,
+    marginBottom: 12,
   },
   messagesContent: {
     paddingBottom: 8,
   },
+  messageWrapper: {
+    flexDirection: 'row',
+    marginBottom: 12,
+    alignItems: 'flex-end',
+  },
+  userMessageWrapper: {
+    justifyContent: 'flex-end',
+  },
+  botMessageWrapper: {
+    justifyContent: 'flex-start',
+  },
+  avatarContainer: {
+    marginRight: 8,
+    marginBottom: 4,
+  },
+  jibbyAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: jibbyOrange,
+  },
   messageContainer: {
-    maxWidth: '80%',
+    maxWidth: '75%',
     padding: 12,
-    borderRadius: 12,
-    marginBottom: 8,
+    borderRadius: 16,
   },
   userMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#f87224ff',
-    borderBottomRightRadius: 2,
+    backgroundColor: jibbyOrange,
+    borderBottomRightRadius: 4,
   },
   botMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#f3f4f6',
-    borderBottomLeftRadius: 2,
+    backgroundColor: '#f8f9fa',
+    borderBottomLeftRadius: 4,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
   },
   messageText: {
     fontSize: 14,
+    lineHeight: 20,
+  },
+  userMessageText: {
+    color: '#ffffff',
+  },
+  botMessageText: {
     color: '#111827',
   },
   servicesContainer: {
     marginTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
+    borderTopColor: '#dee2e6',
     paddingTop: 8,
   },
   servicesTitle: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#4b5563',
-    marginBottom: 4,
+    color: jibbyOrange,
+    marginBottom: 6,
   },
   servicesTagsContainer: {
     flexDirection: 'row',
@@ -276,61 +395,92 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   serviceTag: {
-    backgroundColor: '#f38e29ff',
+    backgroundColor: jibbyLightOrange,
     borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     marginRight: 6,
     marginBottom: 4,
+    borderWidth: 1,
+    borderColor: jibbyOrange,
   },
   serviceText: {
-    fontSize: 12,
-    color: '#111827',
+    fontSize: 11,
+    color: '#ffffff',
+    fontWeight: '500',
   },
   timestamp: {
     fontSize: 10,
-    color: '#000000',
-    marginTop: 4,
+    marginTop: 6,
     alignSelf: 'flex-end',
   },
-  typingIndicator: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#f3f4f6',
-    padding: 8,
-    borderRadius: 12,
+  userTimestamp: {
+    color: 'rgba(255,255,255,0.8)',
+  },
+  botTimestamp: {
+    color: '#6b7280',
+  },
+  typingWrapper: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
     marginBottom: 8,
+  },
+  typingAvatarContainer: {
+    marginRight: 8,
+    marginBottom: 4,
+  },
+  typingAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: jibbyOrange,
+  },
+  typingIndicator: {
+    backgroundColor: '#f8f9fa',
+    padding: 10,
+    borderRadius: 16,
+    borderBottomLeftRadius: 4,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
   },
   typingText: {
     fontSize: 12,
-    color: '#6b7280',
+    color: jibbyOrange,
     fontStyle: 'italic',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#e5e7eb',
-    borderRadius: 24,
-    paddingHorizontal: 12,
+    borderRadius: 25,
+    paddingHorizontal: 16,
+    backgroundColor: '#f8f9fa',
   },
   input: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 12,
     color: '#111827',
     maxHeight: 100,
+    fontSize: 14,
   },
   sendButton: {
-    backgroundColor: '#f6953bff',
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    backgroundColor: jibbyOrange,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   disabledButton: {
-    backgroundColor: '#f6953bff',
+    backgroundColor: '#9ca3af',
   },
 });
-
 export default FloatingChatBot;
